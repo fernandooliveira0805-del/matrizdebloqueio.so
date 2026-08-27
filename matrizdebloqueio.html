@@ -3,268 +3,1318 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Matriz de Bloqueio</title>
+<title>Matriz de Bloqueio — Captura em Campo v6</title>
 <meta name="theme-color" content="#007e7a">
 <style>
-:root{--teal:#007e7a;--teal2:#005f5b;--gold:#f5b700;--bg:#f3f7f7;--ink:#183030;--muted:#657676;--danger:#b3261e;--ok:#197b4b;--line:#d7e3e3}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-header{position:sticky;top:0;z-index:20;background:linear-gradient(115deg,var(--teal2),var(--teal));color:#fff;padding:14px 18px;box-shadow:0 2px 12px #14373733}
-.head{max-width:1450px;margin:auto;display:flex;align-items:center;gap:12px;justify-content:space-between}
-.brand{display:flex;gap:11px;align-items:center}.mark{width:42px;height:42px;display:grid;place-items:center;background:#fff;border-radius:12px;color:var(--teal);font-weight:900}
-.brand h1{font-size:20px;margin:0}.brand small{opacity:.9}
-.status{font-size:12px;background:#ffffff1f;border:1px solid #ffffff55;padding:7px 10px;border-radius:999px}
-main{max-width:1450px;margin:18px auto;padding:0 14px 60px}
-.toolbar,.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 5px 20px #1648480d}
-.toolbar{padding:12px;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.btn{border:0;border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer;background:#e9f2f2;color:var(--teal2);display:inline-flex;gap:7px;align-items:center;font-size:14px}
-.btn.primary{background:var(--teal);color:#fff}.btn.gold{background:var(--gold);color:#242000}.btn.danger{background:#ffebe9;color:var(--danger)}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.tabs{display:flex;gap:6px;margin:14px 0;flex-wrap:wrap}
-.tab{padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:700;cursor:pointer}
+:root{
+  --teal:#007e7a;--teal2:#005f5b;--teal3:#003d3a;--gold:#f5b700;--bg:#eef4f4;--ink:#122a2a;
+  --muted:#5f7373;--danger:#b3261e;--ok:#197b4b;--warn:#a35b00;--line:#d3e2e2;--tint:#e7f2f1;
+  --shadow:0 6px 22px #0e35350f;--r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:30;background:linear-gradient(118deg,var(--teal3),var(--teal));color:#fff;padding:12px 16px;box-shadow:0 2px 14px #0e35352e}
+.head{max-width:1500px;margin:auto;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.brand{display:flex;gap:11px;align-items:center;min-width:0}
+.mark{width:44px;height:44px;flex:none;display:grid;place-items:center;background:#fff;border-radius:12px;color:var(--teal2);font-weight:900;letter-spacing:-.5px}
+.brand h1{font-size:19px;margin:0;line-height:1.15}
+.brand small{opacity:.88;font-size:12px}
+.status{font-size:12px;background:#ffffff1f;border:1px solid #ffffff55;padding:7px 11px;border-radius:999px;white-space:nowrap}
+main{max-width:1500px;margin:16px auto;padding:0 12px 90px}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.toolbar{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:10px;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.btn{border:0;border-radius:11px;padding:11px 14px;font-weight:700;cursor:pointer;background:var(--tint);color:var(--teal2);display:inline-flex;gap:7px;align-items:center;font-size:14px;line-height:1;font-family:inherit;min-height:44px}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--teal);color:#fff}
+.btn.gold{background:var(--gold);color:#2a2400}
+.btn.danger{background:#ffeceb;color:var(--danger)}
+.btn.ghost{background:#fff;border:1px solid var(--line)}
+.btn.sm{padding:7px 10px;font-size:13px;min-height:36px}
+.btn:disabled{opacity:.42;cursor:not-allowed}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #17b3aa;outline-offset:1px}
+.tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
+.tab{padding:11px 14px;border-radius:11px;border:1px solid var(--line);background:#fff;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px;min-height:44px}
 .tab.active{background:var(--teal);color:#fff;border-color:var(--teal)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-.metric{padding:15px}.metric b{font-size:23px;display:block;color:var(--teal2)}.metric span{font-size:12px;color:var(--muted)}
-.panel{padding:14px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.grow{flex:1}
-.search{min-width:220px;border:1px solid var(--line);padding:10px 12px;border-radius:10px;font:inherit}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:12px;max-height:61vh}
-table{border-collapse:separate;border-spacing:0;width:100%;font-size:12px}
-th{position:sticky;top:0;background:var(--teal2);color:#fff;text-align:left;padding:10px;z-index:3;white-space:normal;min-width:145px}
-th:first-child,td:first-child{position:sticky;left:0;z-index:4}th:first-child{min-width:64px}td:first-child{background:#eef5f5}
-td{border-bottom:1px solid var(--line);border-right:1px solid #edf2f2;padding:4px;vertical-align:top}
-td input,td select,td textarea{width:100%;min-width:130px;border:1px solid transparent;background:transparent;border-radius:6px;padding:7px;font:inherit}
-td textarea{min-height:46px;resize:vertical}
-td input:focus,td select:focus,td textarea:focus{outline:2px solid #20a9a2;background:#fff}
+.tab b{background:#ffffff30;border-radius:99px;padding:1px 7px;margin-left:6px;font-size:12px}
+.tab:not(.active) b{background:var(--tint);color:var(--teal2)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.metric{padding:14px}
+.metric b{font-size:22px;display:block;color:var(--teal2)}
+.metric span{font-size:12px;color:var(--muted)}
+.metric.alert b{color:var(--danger)}
+.panel{padding:13px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+.search{min-width:180px;border:1px solid var(--line);padding:11px 12px;border-radius:11px;font:inherit;background:#fff}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px;max-height:62vh;-webkit-overflow-scrolling:touch}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
+th{position:sticky;top:0;background:var(--teal2);color:#fff;text-align:left;padding:9px;z-index:3;min-width:150px;font-size:11.5px;line-height:1.25}
+th:first-child,td:first-child{position:sticky;left:0;z-index:4}
+th:first-child{min-width:78px;z-index:5}
+td:first-child{background:#eaf3f3}
+td{border-bottom:1px solid var(--line);border-right:1px solid #eef3f3;padding:3px;vertical-align:top}
+td input,td select,td textarea{width:100%;min-width:135px;border:1px solid transparent;background:transparent;border-radius:7px;padding:8px;font:inherit;font-size:12.5px;color:inherit}
+td textarea{min-height:44px;resize:vertical}
+td select{min-width:120px}
+td input:focus,td select:focus,td textarea:focus{background:#fff;border-color:#17b3aa}
+td .miss{background:#fff6f5}
 tr.invalid td:first-child{border-left:4px solid var(--danger)}
-.required{color:#ffe08a}.empty{text-align:center;padding:45px;color:var(--muted)}
-.modal{position:fixed;inset:0;background:#071a1acc;display:none;align-items:center;justify-content:center;padding:14px;z-index:50}
+tr.dupe td:first-child{border-left:4px solid var(--warn)}
+tr.sel td{background:#f2fbfa}
+.required{color:#ffe08a}
+.empty{text-align:center;padding:42px 18px;color:var(--muted)}
+.empty b{color:var(--ink);display:block;margin-bottom:6px;font-size:15px}
+.modal{position:fixed;inset:0;background:#04161699;backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;padding:10px;z-index:60}
 .modal.open{display:flex}
-.dialog{background:#fff;border-radius:16px;width:min(920px,100%);max-height:94vh;overflow:auto;padding:18px}
-.dialog h2{margin-top:0}
-.camera{background:#0b1616;border-radius:12px;overflow:hidden;min-height:240px;display:grid;place-items:center}
-.camera video,.camera img{width:100%;max-height:55vh;object-fit:contain}
-.scan-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.notice{padding:11px;border-radius:10px;background:#fff8dd;border-left:4px solid var(--gold);font-size:13px}
-.progress{height:9px;background:#dce8e8;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:var(--teal);width:0}
+.dialog{background:#fff;border-radius:16px;width:min(1080px,100%);max-height:95vh;overflow:auto;padding:16px}
+.dialog h2{margin:0;font-size:18px}
+.dialog h3{font-size:14px;margin:14px 0 6px}
+.camera{background:#050d0d;border-radius:12px;overflow:hidden;position:relative;display:grid;place-items:center;min-height:46vh}
+.camera video,.camera img{width:100%;max-height:62vh;object-fit:contain;display:block}
+.camera .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.camera .flash.on{animation:fl .28s ease-out}
+@keyframes fl{from{opacity:.85}to{opacity:0}}
+.camcount{position:absolute;top:10px;left:10px;background:#000000a6;color:#fff;padding:6px 11px;border-radius:99px;font-size:12px;font-weight:700}
+.camtools{position:absolute;top:10px;right:10px;display:flex;gap:6px;flex-direction:column}
+.iconbtn{width:42px;height:42px;border-radius:50%;border:0;background:#000000a6;color:#fff;font-size:17px;cursor:pointer}
+.iconbtn.on{background:var(--gold);color:#2a2400}
+.shutter{width:74px;height:74px;border-radius:50%;border:5px solid #fff;background:var(--gold);color:#2a2400;font-size:26px;cursor:pointer;box-shadow:0 4px 16px #0006}
+.strip{display:flex;gap:7px;overflow-x:auto;padding:9px 2px;min-height:74px}
+.thumb{position:relative;flex:none;width:64px;height:64px;border-radius:9px;overflow:hidden;border:2px solid var(--line);background:#0b1616;cursor:pointer}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb .x{position:absolute;top:1px;right:1px;background:#000c;color:#fff;border:0;border-radius:50%;width:19px;height:19px;font-size:12px;cursor:pointer;line-height:1}
+.thumb .st{position:absolute;bottom:0;left:0;right:0;font-size:9px;text-align:center;color:#fff;padding:1px}
+.st.ok{background:#197b4bcc}.st.err{background:#b3261ecc}.st.run{background:#a35b00cc}.st.wait{background:#4a5c6bcc}
+.notice{padding:11px 12px;border-radius:11px;background:#fff8dd;border-left:4px solid var(--gold);font-size:13px;line-height:1.45}
+.notice.info{background:var(--tint);border-left-color:var(--teal)}
+.progress{height:9px;background:#dbe9e9;border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--teal);width:0;transition:width .25s}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .field label{font-size:12px;font-weight:700;display:block;margin-bottom:4px}
-.field input,.field select,.field textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;font:inherit}
-.field textarea{min-height:66px}
+.field label small{font-weight:400;color:var(--muted)}
+.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:14px;background:#fff}
+.field textarea{min-height:62px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.chip{font-size:12px;background:#e9f2f2;color:var(--teal2);border:1px solid var(--line);border-radius:999px;padding:5px 10px;cursor:pointer}
+.chip{font-size:12px;background:var(--tint);color:var(--teal2);border:1px solid var(--line);border-radius:999px;padding:6px 11px;cursor:pointer;font-family:inherit}
 .chip:hover{background:var(--teal);color:#fff}
-.hidden{display:none!important}.footnote{font-size:12px;color:var(--muted);margin-top:10px}
-.banner{background:#ffebe9;border:1px solid #f3b4af;color:#7c1a14;padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:13px}
-@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.scan-grid,.form-grid{grid-template-columns:1fr}.brand small{display:none}.status{display:none}.toolbar .btn{flex:1;justify-content:center}.dialog{padding:13px}}
+.hidden{display:none!important}
+.footnote{font-size:12px;color:var(--muted);margin-top:9px;line-height:1.5}
+.banner{background:#ffeceb;border:1px solid #f3b4af;color:#7c1a14;padding:10px 12px;border-radius:11px;margin-bottom:10px;font-size:13px}
+.stack{display:flex;flex-direction:column;gap:10px}
+.list{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.item{display:flex;gap:10px;padding:10px;border-bottom:1px solid var(--line);align-items:center}
+.item:last-child{border-bottom:0}
+.item img{width:62px;height:62px;object-fit:cover;border-radius:9px;flex:none;background:#0b1616}
+.item .txt{flex:1;min-width:0;font-size:13px}
+.item .txt b{display:block;font-size:13px}
+.item .txt span{color:var(--muted);font-size:12px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{font-size:11px;font-weight:700;border-radius:99px;padding:3px 9px;background:var(--tint);color:var(--teal2)}
+.badge.ok{background:#e4f5ec;color:var(--ok)}
+.badge.err{background:#ffeceb;color:var(--danger)}
+.badge.warn{background:#fff2df;color:var(--warn)}
+.cand{border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:9px;background:#fff}
+.cand.off{opacity:.5;background:#fafcfc}
+.cand .top{display:flex;gap:9px;align-items:center;margin-bottom:8px}
+.cand .top input[type=checkbox]{width:22px;height:22px;flex:none}
+.cand .tag{font-weight:800;font-size:15px;letter-spacing:.3px}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:7px}
+.mini label{font-size:10.5px;color:var(--muted);font-weight:700;display:block;text-transform:uppercase;letter-spacing:.3px}
+.mini input,.mini select{width:100%;padding:7px;border:1px solid var(--line);border-radius:7px;font:inherit;font-size:13px}
+.sticky-actions{position:sticky;bottom:0;background:#fff;padding:11px 0 2px;border-top:1px solid var(--line);margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.seg{display:flex;gap:0;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:10px 12px;font-weight:700;cursor:pointer;font-family:inherit;font-size:13px;flex:1;min-height:44px}
+.seg button.on{background:var(--teal);color:#fff}
+.kv{font-size:12px;color:var(--muted)}
+.ocr{width:100%;min-height:150px;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace}
+@media(max-width:860px){
+  .grid{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
+  .brand small{display:none}.status{display:none}
+  .toolbar .btn{flex:1 1 44%;justify-content:center}
+  .dialog{padding:12px;border-radius:14px}
+  main{padding:0 8px 90px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+
 <header>
-<div class="head">
-<div class="brand"><div class="mark">MB</div><div><h1>Matriz de Bloqueio</h1><small>Captura, revisão, edição e exportação controlada</small></div></div>
-<div id="saveStatus" class="status">Iniciando…</div>
-</div>
+  <div class="head">
+    <div class="brand">
+      <div class="mark">MB</div>
+      <div><h1>Matriz de Bloqueio</h1><small>Captura em campo · multi-foto · revisão e exportação</small></div>
+    </div>
+    <div id="saveStatus" class="status">Iniciando…</div>
+  </div>
 </header>
+
 <main>
-<div id="libBanner" class="banner hidden"></div>
-<div class="toolbar">
-<label class="btn primary">📂 Importar Excel<input id="fileInput" type="file" accept=".xlsx,.xls,.csv" hidden></label>
-<button class="btn gold" id="cameraBtn">📷 Capturar pela câmera</button>
-<button class="btn" id="manualBtn">＋ Preencher manualmente</button>
-<button class="btn" id="exportBtn">⬇ Exportar Excel</button>
-<button class="btn" id="backupBtn">💾 Backup JSON</button>
-<label class="btn">↥ Restaurar backup<input id="jsonInput" type="file" accept=".json" hidden></label>
-<button class="btn danger" id="clearBtn">🗑 Limpar dados</button>
-</div>
-<div class="tabs">
-<button class="tab active" data-sheet="matrix">Matriz de Bloqueio</button>
-<button class="tab" data-sheet="energy">Fontes de Energia</button>
-<button class="tab" data-sheet="activity">Matriz por Atividade</button>
-</div>
-<div class="grid">
-<div class="card metric"><b id="rowsKpi">0</b><span>registros na aba</span></div>
-<div class="card metric"><b id="validKpi">0</b><span>registros completos</span></div>
-<div class="card metric"><b id="pendingKpi">0</b><span>registros para revisar</span></div>
-<div class="card metric"><b id="sourceKpi">Manual</b><span>origem atual</span></div>
-</div>
-<section class="card panel">
-<div class="row">
-<input id="search" class="search grow" placeholder="Buscar TAG, equipamento, local, energia...">
-<button class="btn" id="addRowBtn">＋ Nova linha</button>
-<button class="btn danger" id="deleteBtn">Excluir selecionadas</button>
-</div>
-<div id="tableHost"></div>
-<p class="footnote">A captura por câmera gera apenas sugestões. Nenhuma informação lida é confirmada automaticamente: revise os campos antes de salvar ou exportar.</p>
-</section>
+  <div id="libBanner" class="banner hidden"></div>
+
+  <div class="toolbar">
+    <button class="btn gold" id="cameraBtn">📷 Capturar em série</button>
+    <label class="btn">🖼 Enviar fotos<input id="imageInput" type="file" accept="image/*" multiple hidden></label>
+    <button class="btn" id="manualBtn">＋ Nova linha</button>
+    <button class="btn" id="serieBtn">⛓ Gerar série de pontos</button>
+    <label class="btn primary">📂 Importar planilha<input id="fileInput" type="file" accept=".xlsx,.xls,.csv" hidden></label>
+    <button class="btn primary" id="exportBtn">⬇ Exportar Excel</button>
+    <button class="btn ghost" id="backupBtn">💾 Backup</button>
+    <label class="btn ghost">↥ Restaurar<input id="jsonInput" type="file" accept=".json" hidden></label>
+    <button class="btn danger" id="clearBtn">🗑 Limpar</button>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-sheet="matrix">Matriz de bloqueio <b id="cMatrix">0</b></button>
+    <button class="tab" data-sheet="energy">Fontes de energia <b id="cEnergy">0</b></button>
+    <button class="tab" data-sheet="activity">Matriz por atividade <b id="cActivity">0</b></button>
+    <button class="tab" data-sheet="fotos">Fotos <b id="cFotos">0</b></button>
+  </div>
+
+  <div class="grid" id="kpis">
+    <div class="card metric"><b id="rowsKpi">0</b><span>linhas na aba</span></div>
+    <div class="card metric"><b id="validKpi">0</b><span>linhas completas</span></div>
+    <div class="card metric alert"><b id="pendingKpi">0</b><span>linhas a revisar</span></div>
+    <div class="card metric"><b id="sourceKpi">Manual</b><span>origem dos dados</span></div>
+  </div>
+
+  <section class="card panel" id="sheetPanel">
+    <div class="row">
+      <input id="search" class="search grow" placeholder="Buscar TAG, equipamento, local, energia…">
+      <button class="btn sm" id="addRowBtn">＋ Linha</button>
+      <button class="btn sm" id="ctxBtn">📍 Contexto</button>
+      <button class="btn sm" id="bulkBtn">✎ Preencher em massa</button>
+      <button class="btn sm" id="fillDownBtn">↓ Repetir p/ abaixo</button>
+      <button class="btn sm" id="defaultsBtn">✓ Completar "Não"</button>
+      <button class="btn sm danger" id="deleteBtn">Excluir selecionadas</button>
+    </div>
+    <div id="tableHost"></div>
+    <p class="footnote">A leitura por câmera gera <b>sugestões</b>. Nada é confirmado automaticamente: confira TAG, tipo de energia, energia residual e dependências em campo antes de exportar.</p>
+  </section>
+
+  <section class="card panel hidden" id="fotosPanel">
+    <div class="row">
+      <div class="grow"><b>Fotos capturadas</b><div class="kv" id="fotoInfo">Nenhuma foto.</div></div>
+      <button class="btn sm primary" id="ocrAllBtn">🔎 Ler todas pendentes</button>
+      <button class="btn sm" id="extractAllBtn">⇥ Extrair linhas de todas</button>
+      <button class="btn sm danger" id="fotosClearBtn">Excluir todas</button>
+    </div>
+    <div id="fotosHost" style="margin-top:10px"></div>
+  </section>
 </main>
 
+<!-- ===================== CÂMERA ===================== -->
 <div class="modal" id="cameraModal"><div class="dialog">
-<div class="row"><h2 class="grow">Captura pela câmera</h2><button class="btn" data-close>✕ Fechar</button></div>
-<div class="notice">Enquadre uma placa, etiqueta ou trecho legível. O reconhecimento pode conter erros e sempre exige conferência humana.</div>
-<div class="scan-grid" style="margin-top:12px">
-<div>
-<div class="camera"><video id="video" autoplay playsinline></video><img id="preview" class="hidden" alt="Prévia"></div>
-<canvas id="canvas" class="hidden"></canvas>
-<div class="row" style="margin-top:10px">
-<button id="shotBtn" class="btn gold">📸 Fotografar</button>
-<label class="btn">🖼 Usar imagem<input id="imageInput" type="file" accept="image/*" capture="environment" hidden></label>
-<button id="retryBtn" class="btn hidden">↻ Nova captura</button>
-</div>
-</div>
-<div>
-<h3>Texto reconhecido</h3>
-<div class="progress"><i id="progressBar"></i></div>
-<textarea id="ocrText" style="width:100%;min-height:240px;margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:10px" placeholder="O texto lido aparecerá aqui e poderá ser corrigido."></textarea>
-<button id="reviewBtn" class="btn primary" style="margin-top:9px">Revisar e preencher campos</button>
-</div>
-</div>
+  <div class="row"><h2 class="grow">Capturar em série</h2><button class="btn sm" data-close>✕ Fechar</button></div>
+  <div class="notice" style="margin:10px 0">Fotografe quantos pontos precisar sem sair da tela: cada disparo entra na fila abaixo. Enquadre etiquetas, portas de cubículos, placas de motor ou listas impressas.</div>
+
+  <div class="seg" style="margin-bottom:10px" id="perfilSeg">
+    <button data-perfil="painel" class="on">Painel / cubículos</button>
+    <button data-perfil="placa">Placa do equipamento</button>
+    <button data-perfil="lista">Lista ou tabela</button>
+  </div>
+
+  <div class="camera">
+    <video id="video" autoplay playsinline muted></video>
+    <div class="camcount" id="camCount">0 fotos</div>
+    <div class="camtools">
+      <button class="iconbtn" id="torchBtn" title="Lanterna">🔦</button>
+      <button class="iconbtn" id="swapBtn" title="Trocar câmera">🔄</button>
+    </div>
+    <div class="flash" id="flash"></div>
+  </div>
+  <div class="row" style="justify-content:center;margin-top:12px">
+    <input id="zoom" type="range" min="1" max="5" step="0.1" value="1" class="hidden" style="width:150px">
+  </div>
+  <div class="row" style="justify-content:center;gap:18px;margin-top:8px">
+    <label class="btn">🖼 Galeria<input id="imageInput2" type="file" accept="image/*" multiple hidden></label>
+    <button class="shutter" id="shotBtn" title="Fotografar">📸</button>
+    <button class="btn primary" id="doneBtn">Concluir e ler</button>
+  </div>
+  <div class="strip" id="strip"></div>
+  <div id="camMsg" class="footnote"></div>
 </div></div>
 
-<div class="modal" id="formModal"><div class="dialog">
-<div class="row"><h2 id="formTitle" class="grow">Novo registro</h2><button class="btn" data-close>✕ Fechar</button></div>
-<div id="formFields" class="form-grid"></div>
-<div class="row" style="margin-top:14px"><button id="saveFormBtn" class="btn primary">Salvar registro</button><button class="btn" data-close>Cancelar</button></div>
+<!-- ===================== PROCESSAMENTO OCR ===================== -->
+<div class="modal" id="ocrModal"><div class="dialog">
+  <div class="row"><h2 class="grow">Lendo as fotos</h2><button class="btn sm" id="ocrCancel">Parar</button></div>
+  <p class="kv" id="ocrStep">Preparando…</p>
+  <div class="progress"><i id="ocrBar"></i></div>
+  <div class="list" id="ocrList" style="margin-top:12px"></div>
+  <div class="sticky-actions"><button class="btn primary grow" id="ocrGo" disabled>Revisar linhas encontradas</button></div>
 </div></div>
+
+<!-- ===================== REVISÃO DE CANDIDATOS ===================== -->
+<div class="modal" id="candModal"><div class="dialog">
+  <div class="row"><h2 class="grow">Linhas encontradas</h2><button class="btn sm" data-close>✕ Fechar</button></div>
+  <div class="notice" id="candNotice" style="margin:10px 0"></div>
+  <div class="row" style="margin-bottom:10px">
+    <button class="btn sm" id="candAll">Marcar todas</button>
+    <button class="btn sm" id="candNone">Desmarcar todas</button>
+    <button class="btn sm" id="candDupes">Desmarcar duplicadas</button>
+  </div>
+  <div id="candHost"></div>
+  <div class="sticky-actions">
+    <button class="btn primary grow" id="candApply">Adicionar selecionadas</button>
+    <button class="btn ghost" data-close>Cancelar</button>
+  </div>
+</div></div>
+
+<!-- ===================== TEXTO RECONHECIDO ===================== -->
+<div class="modal" id="textModal"><div class="dialog">
+  <div class="row"><h2 class="grow">Texto reconhecido</h2><button class="btn sm" data-close>✕ Fechar</button></div>
+  <img id="textImg" style="width:100%;max-height:34vh;object-fit:contain;background:#0b1616;border-radius:10px;margin:10px 0">
+  <p class="kv">Corrija o texto se necessário e extraia as linhas novamente.</p>
+  <textarea id="textArea" class="ocr"></textarea>
+  <div class="sticky-actions">
+    <button class="btn primary grow" id="textExtract">Extrair linhas deste texto</button>
+    <button class="btn" id="textSave">Salvar correção</button>
+  </div>
+</div></div>
+
+<!-- ===================== FORMULÁRIO ===================== -->
+<div class="modal" id="formModal"><div class="dialog">
+  <div class="row"><h2 id="formTitle" class="grow">Nova linha</h2><button class="btn sm" data-close>✕ Fechar</button></div>
+  <div id="formFields" class="form-grid" style="margin-top:12px"></div>
+  <div class="sticky-actions"><button id="saveFormBtn" class="btn primary grow">Salvar linha</button><button class="btn ghost" data-close>Cancelar</button></div>
+</div></div>
+
+<!-- ===================== CONTEXTO ===================== -->
+<div class="modal" id="ctxModal"><div class="dialog">
+  <div class="row"><h2 class="grow">Contexto da inspeção</h2><button class="btn sm" data-close>✕ Fechar</button></div>
+  <p class="kv" style="margin:8px 0 12px">Estes valores entram automaticamente em toda linha nova e em toda linha vinda das fotos. Preencha uma vez por área e ganhe tempo.</p>
+  <div class="form-grid">
+    <div class="field"><label>Complexo <small>máx. 50</small></label><input id="ctxComplexo" maxlength="50"></div>
+    <div class="field"><label>Unidade ou site <small>máx. 50</small></label><input id="ctxUnidade" maxlength="50"></div>
+    <div class="field"><label>Equipamento padrão <small>máx. 25</small></label><input id="ctxEquip" maxlength="25"></div>
+    <div class="field"><label>Local do equipamento <small>máx. 25</small></label><input id="ctxLocal" maxlength="25"></div>
+    <div class="field"><label>Tipo de energia padrão</label><select id="ctxEnergia"></select></div>
+    <div class="field"><label>Local de instalação — SAP</label><input id="ctxSap"></div>
+  </div>
+  <div class="sticky-actions">
+    <button class="btn primary grow" id="ctxSave">Salvar contexto</button>
+    <button class="btn" id="ctxApply">Aplicar às linhas vazias</button>
+  </div>
+</div></div>
+
+<!-- ===================== SÉRIE ===================== -->
+<div class="modal" id="serieModal"><div class="dialog">
+  <div class="row"><h2 class="grow">Gerar série de pontos</h2><button class="btn sm" data-close>✕ Fechar</button></div>
+  <p class="kv" style="margin:8px 0 12px">Para painéis com cubículos ou colunas sequenciais. Cria todas as linhas de uma vez, já com o contexto aplicado.</p>
+  <div class="form-grid">
+    <div class="field"><label>TAG base <small>ex.: QD-1730CC-01</small></label><input id="srBase" placeholder="QD-1730CC-01"></div>
+    <div class="field"><label>Sufixo <small>ex.: K, M, DJ</small></label><input id="srPre" value="K" maxlength="4"></div>
+    <div class="field"><label>De</label><input id="srDe" type="number" value="1" min="0"></div>
+    <div class="field"><label>Até</label><input id="srAte" type="number" value="12" min="0"></div>
+    <div class="field"><label>Dígitos</label><select id="srDig"><option>2</option><option>1</option><option>3</option></select></div>
+    <div class="field"><label>Tipo de energia</label><select id="srEnergia"></select></div>
+  </div>
+  <p class="kv" id="srPrev" style="margin-top:10px"></p>
+  <div class="sticky-actions"><button class="btn primary grow" id="srGo">Criar linhas</button><button class="btn ghost" data-close>Cancelar</button></div>
+</div></div>
+
+<!-- ===================== MASSA ===================== -->
+<div class="modal" id="bulkModal"><div class="dialog">
+  <div class="row"><h2 class="grow">Preencher em massa</h2><button class="btn sm" data-close>✕ Fechar</button></div>
+  <p class="kv" style="margin:8px 0 12px" id="bulkScope"></p>
+  <div class="form-grid">
+    <div class="field"><label>Coluna</label><select id="bulkCol"></select></div>
+    <div class="field"><label>Valor</label><div id="bulkValHost"></div></div>
+  </div>
+  <label class="row" style="margin-top:10px;font-size:13px"><input type="checkbox" id="bulkOnlyEmpty" checked style="width:20px;height:20px"> Preencher apenas onde estiver vazio</label>
+  <div class="sticky-actions"><button class="btn primary grow" id="bulkGo">Aplicar</button><button class="btn ghost" data-close>Cancelar</button></div>
+</div></div>
+
+<!-- ===================== EXPORTAR ===================== -->
+<div class="modal" id="expModal"><div class="dialog">
+  <div class="row"><h2 class="grow">Exportar Excel</h2><button class="btn sm" data-close>✕ Fechar</button></div>
+  <div id="expWarn"></div>
+  <div class="stack" style="margin-top:12px">
+    <button class="btn primary" id="expTemplate">📘 No modelo oficial importado <span class="kv" id="expTplHint"></span></button>
+    <button class="btn ghost" id="expSimple">📄 Planilha simples (cabeçalho na 1ª linha)</button>
+    <button class="btn ghost" id="expCsv">📑 CSV da aba atual</button>
+  </div>
+  <p class="footnote">No modelo oficial as linhas entram a partir da linha 7 da aba "Matriz de bloqueio" e da linha 6 da aba "Matriz por atividade", mantendo cabeçalhos, abas e instruções. Formatação condicional e listas suspensas podem ser simplificadas na gravação: se a validação do anexo exigir as listas originais, exporte o CSV e cole os valores no arquivo oficial. A aba auxiliar "Fontes de energia" só é gravada na planilha simples, para não alterar o anexo padrão.</p>
+</div></div>
+
+<canvas id="canvas" class="hidden"></canvas>
 
 <script>
-/* ---------- Carregamento resiliente de bibliotecas ---------- */
-function loadScript(urls){return new Promise(res=>{let i=0;(function go(){if(i>=urls.length)return res(false);let s=document.createElement('script');s.src=urls[i++];s.onload=()=>res(true);s.onerror=go;document.head.appendChild(s)})()})}
+/* =========================================================================
+   Matriz de Bloqueio — v6
+   Base: PRO-040948 Anexo 03 (abas "Matriz de bloqueio" e "Matriz por atividade")
+   ========================================================================= */
+
+/* ---------- utilidades ---------- */
+const el = id => document.getElementById(id);
+const norm = s => String(s==null?'':s).trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function loadScript(urls){return new Promise(res=>{let i=0;(function go(){if(i>=urls.length)return res(false);const s=document.createElement('script');s.src=urls[i++];s.onload=()=>res(true);s.onerror=go;document.head.appendChild(s)})()})}
 let LIBS={xlsx:false,ocr:false};
 
-/* ---------- Definição de campos ---------- */
+/* ---------- definição de campos (nome, obrigatório, máx. caracteres, dica) ---------- */
 const matrixFields=[
-['COMPLEXO',1,50],['UNIDADE OU SITE',1,50],['EQUIPAMENTO',1,25],['TAG DO PONTO DE BLOQUEIO',1,25],
-['FUNÇÃO DO EQUIPAMENTO',1,25],['LOCAL DO EQUIPAMENTO',1,25],['TIPO DE ENERGIA',1,0],['LOCAL DO BLOQUEIO',1,25],
-['EXISTE ENERGIA RESIDUAL? S/N',1,0],['FORMA LIBERAÇÃO E CONTROLE DE ENERGIA RESIDUAL',1,100],['MÉTODO DE TESTE DE EFETIVIDADE',1,100],
-['DESCRIÇÃO MEDIDAS DE CONTROLE ADICIONAIS',1,100],['DISPOSITIVO DE BLOQUEIO (QUAL O DISPOSITIVO)',1,100],['ACIONAMENTO LOCAL',1,0],
-['DEPENDENTE A MONTANTE',1,0],['DEPENDENTE A JUSANTE',1,0],['Modelo do Equipamento',0,0],['Fabricante do Equipamento',0,0],
-['Reserva 1',0,0],['Reserva 2',0,0],['Reserva 3',0,0],['Reserva 4',0,0],['Reserva 5',0,0]];
-const activityFields=[['NOME DA ATIVIDADE',1,0],['INSTRUÇÕES DA ATIVIDADE DE BLOQUEIO',1,0],['TIPO DE BLOQUEIO',1,0],['TAG DO PONTO DE BLOQUEIO',1,0],['EQUIPAMENTO',1,0],['LOCAL DE INSTALAÇÃO - SAP',0,0]];
-const energyFields=[['EQUIPAMENTO / TAG',1,0],['TIPO DE ENERGIA',1,0],['DESCRIÇÃO DA FONTE',1,0],['PONTO DE BLOQUEIO',1,0],['EXISTE ENERGIA RESIDUAL? S/N',1,0],['MÉTODO DE ELIMINAÇÃO / CONTROLE',1,0],['OBSERVAÇÕES',0,0]];
+ ['COMPLEXO',1,50,'Complexo Vale.'],
+ ['UNIDADE OU SITE',1,50,'Unidade ou site.'],
+ ['EQUIPAMENTO',1,25,'TAG do equipamento para fins de gestão (britador, peneira, transportador, transformador).'],
+ ['TAG DO PONTO DE BLOQUEIO',1,25,'TAG do ponto onde o bloqueio é executado.'],
+ ['FUNÇÃO DO EQUIPAMENTO',1,25,'Ex.: Entrada 13.8kV, Motor partida direta.'],
+ ['LOCAL DO EQUIPAMENTO',1,25,'Onde o equipamento está instalado.'],
+ ['TIPO DE ENERGIA',1,0,'Lista suspensa oficial.'],
+ ['LOCAL DO BLOQUEIO',1,25,'Ponto de execução do bloqueio.'],
+ ['EXISTE ENERGIA RESIDUAL? S/N',1,0,'Sim ou Não.'],
+ ['FORMA LIBERAÇÃO E CONTROLE DE ENERGIA RESIDUAL',1,100,'Como a energia residual é aliviada e controlada.'],
+ ['MÉTODO DE TESTE DE EFETIVIDADE',1,100,'Como se comprova a ausência de energia.'],
+ ['DESCRIÇÃO MEDIDAS DE CONTROLE ADICIONAIS',1,100,'Medidas complementares.'],
+ ['DISPOSITIVO DE BLOQUEIO (QUAL O DISPOSITIVO)',1,100,'Cadeado, garra, pino, dispositivo específico.'],
+ ['ACIONAMENTO LOCAL',1,0,'Há mais de um acionamento ou outra fonte? Se não, preencher "Não". Se sim, informar a TAG; várias, separadas por ponto e vírgula.'],
+ ['DEPENDENTE A MONTANTE',1,0,'Fonte de energia antes do equipamento. Se não houver, "Não".'],
+ ['DEPENDENTE A JUSANTE',1,0,'Fonte de energia depois do equipamento. Se não houver, "Não".'],
+ ['Modelo do Equipamento',0,0,'Opcional, mas importante.'],
+ ['Fabricante do Equipamento',0,0,'Opcional, mas importante.'],
+ ['Reserva 1',0,0,''],['Reserva 2',0,0,''],['Reserva 3',0,0,''],['Reserva 4',0,0,''],['Reserva 5',0,0,'']
+];
+const activityFields=[
+ ['NOME DA ATIVIDADE',1,0,''],
+ ['INSTRUÇÕES DA ATIVIDADE DE BLOQUEIO',1,0,''],
+ ['TIPO DE BLOQUEIO',1,0,'Lista: Bloqueio exclusivo ou Bloqueio.'],
+ ['TAG DO PONTO DE BLOQUEIO',1,0,'Deve existir na Matriz de bloqueio.'],
+ ['EQUIPAMENTO',1,0,''],
+ ['LOCAL DE INSTALAÇÃO - SAP',0,0,'']
+];
+const energyFields=[
+ ['EQUIPAMENTO / TAG',1,0,''],['TIPO DE ENERGIA',1,0,''],['DESCRIÇÃO DA FONTE',1,0,''],
+ ['PONTO DE BLOQUEIO',1,0,''],['EXISTE ENERGIA RESIDUAL? S/N',1,0,''],
+ ['MÉTODO DE ELIMINAÇÃO / CONTROLE',1,0,''],['OBSERVAÇÕES',0,0,'']
+];
 
-const energyTypes=['','ELÉTRICA','PNEUMÁTICA','HIDRÁULICA','MECÂNICA','GRAVITACIONAL','TÉRMICA','QUÍMICA','RADIOATIVA','VAPOR','OUTRA'];
+/* listas exatamente como no anexo oficial */
+const energyTypes=['','ELÉTRICA','QUÍMICA','HIDRÁULICA','MECÂNICA','PNEUMÁTICA','RADIOATIVA','TÉRMICA','GRAVITACIONAL'];
 const yesNo=['','Sim','Não'];
 const blockTypes=['','Bloqueio','Bloqueio exclusivo'];
-/* Sugestões por tipo de energia (não são preenchidas automaticamente) */
+
 const sourceSuggestions={
-'ELÉTRICA':['Corrente viva','Capacitor','Banco de baterias','Painel elétrico','Disjuntor','Transformador'],
-'PNEUMÁTICA':['Reservatório de ar','Compressor','Linha de ar comprimido','Canhão de ar'],
-'HIDRÁULICA':['Cilindro hidráulico','Unidade hidráulica','Acumulador','Linha pressurizada','Bomba'],
-'MECÂNICA':['Eixo em rotação','Polia / correia','Mola tensionada','Contrapeso','Volante de inércia'],
-'GRAVITACIONAL':['Carga suspensa','Braço / lança','Ferramenta pesada elevada','Comporta'],
-'TÉRMICA':['Superfície quente','Vapor sob pressão','Fluido aquecido','Forno / caldeira'],
-'QUÍMICA':['Produto químico perigoso','Gás inflamável','Linha de combustível','Produto tóxico'],
-'RADIOATIVA':['Fonte radioativa','Medidor nuclear'],
-'VAPOR':['Linha de vapor','Purgador','Caldeira'],
-'OUTRA':[]
+ 'ELÉTRICA':['Corrente viva','Capacitor','Banco de baterias','Painel elétrico','Disjuntor','Transformador','Inversor de frequência'],
+ 'PNEUMÁTICA':['Reservatório de ar','Compressor','Linha de ar comprimido','Canhão de ar'],
+ 'HIDRÁULICA':['Cilindro hidráulico','Unidade hidráulica','Acumulador','Linha pressurizada','Bomba'],
+ 'MECÂNICA':['Eixo em rotação','Polia e correia','Mola tensionada','Contrapeso','Volante de inércia'],
+ 'GRAVITACIONAL':['Carga suspensa','Lança','Ferramenta elevada','Comporta','Material retido em silo'],
+ 'TÉRMICA':['Superfície quente','Vapor sob pressão','Fluido aquecido','Forno','Caldeira'],
+ 'QUÍMICA':['Produto químico perigoso','Gás inflamável','Linha de combustível','Produto tóxico'],
+ 'RADIOATIVA':['Fonte radioativa','Medidor nuclear']
 };
 
-/* ---------- Estado ---------- */
-let state=safeLoad();
-let current='matrix',editIndex=null,stream=null;
-function safeLoad(){try{let x=JSON.parse(localStorage.getItem('matrizBloqueioApp')||'null');if(x&&Array.isArray(x.matrix)){x.energy=x.energy||[];x.activity=x.activity||[];x.source=x.source||'Manual';return x}}catch(e){}return{matrix:[],energy:[],activity:[],source:'Manual'}}
-function fields(){return current==='matrix'?matrixFields:current==='energy'?energyFields:activityFields}
-function data(){return state[current]}
-function persist(){try{localStorage.setItem('matrizBloqueioApp',JSON.stringify(state))}catch(e){}el('saveStatus').textContent='Salvo localmente às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});updateKpis()}
-function el(id){return document.getElementById(id)}
-function norm(s){return String(s==null?'':s).trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase()}
-function isValid(r){return fields().filter(f=>f[1]).every(f=>String(r[f[0]]==null?'':r[f[0]]).trim())}
-function updateKpis(){let d=data();el('rowsKpi').textContent=d.length;el('validKpi').textContent=d.filter(isValid).length;el('pendingKpi').textContent=d.filter(x=>!isValid(x)).length;el('sourceKpi').textContent=state.source||'Manual'}
-function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function optsFor(key){if(key==='TIPO DE ENERGIA')return energyTypes;if(key==='EXISTE ENERGIA RESIDUAL? S/N')return yesNo;if(key==='TIPO DE BLOQUEIO')return blockTypes;return null}
+/* prefixos de TAG usados como pista de função e de equipamento pai */
+const prefixos={
+ SE:{f:'Subestação',pai:1},SA:{f:'Sala elétrica',pai:1},CS:{f:'Casa de força',pai:1},
+ QD:{f:'Quadro de distribuição'},QG:{f:'Quadro geral'},QGBT:{f:'Quadro geral BT'},
+ MC:{f:'Centro de controle de motores'},CCM:{f:'Centro de controle de motores'},
+ TF:{f:'Transformador'},TR:{f:'Transformador'},
+ DJ:{f:'Disjuntor'},CH:{f:'Chave seccionadora'},
+ BR:{f:'Britador'},PN:{f:'Peneira'},TC:{f:'Transportador de correia'},CR:{f:'Correia transportadora'},
+ BB:{f:'Bomba'},BO:{f:'Bomba'},MT:{f:'Motor'},MO:{f:'Motor'},VT:{f:'Ventilador'},VE:{f:'Ventilador'},
+ CP:{f:'Compressor'},MI:{f:'Moinho'},AL:{f:'Alimentador'},GE:{f:'Gerador'},NB:{f:'No-break'},
+ AC:{f:'Ar condicionado'},UC:{f:'Unidade condensadora'},CG:{f:'Chiller'}
+};
+const fabricantes=['WEG','SIEMENS','SCHNEIDER','ABB','GENERAL ELECTRIC','EATON','LOVATO','STECK','CHINT','MITSUBISHI','DANFOSS','CARRIER','HITACHI','SPRINGER','ELGIN','MIDEA','TRANE','YORK','LG','SAMSUNG','METALTEX','SOPRANO','ALTRONIC','TOSHIBA','ALLEN BRADLEY','ROCKWELL'];
 
-/* ---------- Tabela ---------- */
-function cellControl(row,i,key,max){let v=esc(row[key]||'');let opts=optsFor(key);if(opts)return '<select data-i="'+i+'" data-key="'+esc(key)+'">'+opts.map(o=>'<option '+(o===row[key]?'selected':'')+'>'+esc(o)+'</option>').join('')+'</select>';return '<textarea data-i="'+i+'" data-key="'+esc(key)+'" '+(max?'maxlength="'+max+'"':'')+'>'+v+'</textarea>'}
-function render(){
- let q=norm(el('search').value);let d=data();
- let visible=d.map((r,i)=>({r:r,i:i})).filter(x=>!q||Object.keys(x.r).some(k=>norm(x.r[k]).indexOf(q)>=0));
- if(!d.length){el('tableHost').innerHTML='<div class="empty"><b>Nenhum registro nesta aba.</b><br>Importe a planilha, capture uma imagem ou preencha manualmente.</div>';updateKpis();return}
- let html='<div class="table-wrap"><table><thead><tr><th><input id="allCheck" type="checkbox"></th>'+fields().map(f=>'<th>'+esc(f[0])+(f[1]?'<span class="required"> *</span>':'')+(f[2]?'<br><small>máx. '+f[2]+'</small>':'')+'</th>').join('')+'</tr></thead><tbody>';
- html+=visible.map(o=>'<tr class="'+(isValid(o.r)?'':'invalid')+'"><td><input class="rowCheck" type="checkbox" data-i="'+o.i+'"><button class="btn" style="padding:5px;margin-top:4px" data-edit="'+o.i+'">✎</button></td>'+fields().map(f=>'<td>'+cellControl(o.r,o.i,f[0],f[2])+'</td>').join('')+'</tr>').join('');
- html+='</tbody></table></div>';
- el('tableHost').innerHTML=html;
- el('tableHost').querySelectorAll('[data-key]').forEach(x=>x.addEventListener('change',e=>{let t=e.target;data()[+t.dataset.i][t.dataset.key]=t.value;persist();render()}));
- el('tableHost').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openForm(+b.dataset.edit));
- let ac=el('allCheck');if(ac)ac.onchange=()=>document.querySelectorAll('.rowCheck').forEach(c=>c.checked=ac.checked);
- updateKpis();
+/* ---------- estado ---------- */
+const KEY='matrizBloqueioV6';
+let state=carregar();
+let current='matrix', editIndex=null, template=null; // template = bytes do xlsx importado
+let fotos=[];            // {id,dataUrl,ts,perfil,texto,status}
+let candidatos=[];
+let bulkTarget='sel';
+let perfilAtual='painel';
+
+function padrao(){return{matrix:[],energy:[],activity:[],source:'Manual',ctx:{complexo:'',unidade:'',equip:'',local:'',energia:'ELÉTRICA',sap:''}}}
+function carregar(){
+ try{const x=JSON.parse(localStorage.getItem(KEY)||'null');
+  if(x&&Array.isArray(x.matrix)){const p=padrao();return Object.assign(p,x,{ctx:Object.assign(p.ctx,x.ctx||{})})}
+ }catch(e){}
+ // migração da versão anterior
+ try{const v5=JSON.parse(localStorage.getItem('matrizBloqueioApp')||'null');
+  if(v5&&Array.isArray(v5.matrix)){const p=padrao();p.matrix=v5.matrix;p.energy=v5.energy||[];p.activity=v5.activity||[];p.source='Migrado da versão anterior';return p}
+ }catch(e){}
+ return padrao();
 }
-function blank(){let o={};fields().forEach(f=>o[f[0]]='');return o}
+function persist(){
+ try{localStorage.setItem(KEY,JSON.stringify(state))}
+ catch(e){aviso('Armazenamento cheio. Exporte um backup e limpe as fotos antigas.')}
+ el('saveStatus').textContent='Salvo às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+ atualizarKpis();
+}
+let lastSheet='matrix';
+/* a aba "Fotos" não é uma planilha: as ações continuam valendo para a última aba de dados aberta */
+function abaAtiva(){return current==='fotos'?lastSheet:current}
+function fields(sheet){const s=sheet||abaAtiva();return s==='matrix'?matrixFields:s==='energy'?energyFields:activityFields}
+function data(sheet){return state[sheet||abaAtiva()]}
+function optsFor(key){
+ if(key==='TIPO DE ENERGIA')return energyTypes;
+ if(key==='EXISTE ENERGIA RESIDUAL? S/N')return yesNo;
+ if(key==='TIPO DE BLOQUEIO')return blockTypes;
+ return null;
+}
+function isValid(r,sheet){return fields(sheet).filter(f=>f[1]).every(f=>String(r[f[0]]==null?'':r[f[0]]).trim())}
+function vazia(){const o={};fields().forEach(f=>o[f[0]]='');return o}
+function comContexto(){
+ const o=vazia(),c=state.ctx;
+ if(abaAtiva()==='matrix'){o['COMPLEXO']=c.complexo;o['UNIDADE OU SITE']=c.unidade;o['EQUIPAMENTO']=c.equip;o['LOCAL DO EQUIPAMENTO']=c.local;o['TIPO DE ENERGIA']=c.energia}
+ if(abaAtiva()==='energy'){o['TIPO DE ENERGIA']=c.energia;o['EQUIPAMENTO / TAG']=c.equip}
+ if(abaAtiva()==='activity'){o['EQUIPAMENTO']=c.equip;o['LOCAL DE INSTALAÇÃO - SAP']=c.sap}
+ return o;
+}
+function aviso(msg){const b=el('libBanner');b.classList.remove('hidden');b.textContent=msg}
+function atualizarKpis(){
+ const d=data();
+ el('rowsKpi').textContent=d.length;
+ el('validKpi').textContent=d.filter(r=>isValid(r)).length;
+ el('pendingKpi').textContent=d.filter(r=>!isValid(r)).length;
+ el('sourceKpi').textContent=state.source||'Manual';
+ el('cMatrix').textContent=state.matrix.length;
+ el('cEnergy').textContent=state.energy.length;
+ el('cActivity').textContent=state.activity.length;
+ el('cFotos').textContent=fotos.length;
+}
 
-/* ---------- Formulário ---------- */
-function openForm(i,prefill){editIndex=(i==null?null:i);let r=(i==null)?Object.assign(blank(),prefill||{}):data()[i];el('formTitle').textContent=(i==null)?'Novo registro':'Editar registro';
- el('formFields').innerHTML=fields().map(f=>{let key=f[0],v=esc(r[key]||''),opts=optsFor(key),control;
-  if(opts)control='<select data-form="'+esc(key)+'">'+opts.map(o=>'<option '+(o===r[key]?'selected':'')+'>'+esc(o)+'</option>').join('')+'</select>';
-  else control='<textarea data-form="'+esc(key)+'" '+(f[2]?'maxlength="'+f[2]+'"':'')+'>'+v+'</textarea>';
-  let chips='';
-  if(current==='energy'&&key==='DESCRIÇÃO DA FONTE'){chips='<div class="chips" id="srcChips"></div>'}
-  return '<div class="field"><label>'+esc(key)+(f[1]?' *':'')+'</label>'+control+chips+'</div>'}).join('');
- if(current==='energy'){let sel=el('formFields').querySelector('[data-form="TIPO DE ENERGIA"]');if(sel){sel.addEventListener('change',renderSrcChips);renderSrcChips()}}
+/* =========================================================================
+   TABELA — edição direta sem re-renderizar (não perde o foco ao digitar)
+   ========================================================================= */
+function controle(row,i,f){
+ const key=f[0],max=f[2],opts=optsFor(key),falta=f[1]&&!String(row[key]||'').trim();
+ if(opts) return '<select class="'+(falta?'miss':'')+'" data-i="'+i+'" data-key="'+esc(key)+'">'+opts.map(o=>'<option '+(o===row[key]?'selected':'')+'>'+esc(o)+'</option>').join('')+'</select>';
+ return '<textarea class="'+(falta?'miss':'')+'" data-i="'+i+'" data-key="'+esc(key)+'" '+(max?'maxlength="'+max+'"':'')+'>'+esc(row[key]||'')+'</textarea>';
+}
+function tagsDuplicadas(){
+ const chave=abaAtiva()==='matrix'?'TAG DO PONTO DE BLOQUEIO':abaAtiva()==='energy'?'PONTO DE BLOQUEIO':'TAG DO PONTO DE BLOQUEIO';
+ const cont={};data().forEach(r=>{const t=norm(r[chave]);if(t)cont[t]=(cont[t]||0)+1});
+ return {chave,cont};
+}
+function render(){
+ const q=norm(el('search').value), d=data(), fs=fields(), dup=tagsDuplicadas();
+ if(!d.length){
+  el('tableHost').innerHTML='<div class="empty"><b>Nenhuma linha nesta aba.</b>Capture fotos dos pontos, gere uma série de cubículos ou importe o anexo preenchido.</div>';
+  atualizarKpis();return;
+ }
+ const vis=d.map((r,i)=>({r,i})).filter(x=>!q||fs.some(f=>norm(x.r[f[0]]).indexOf(q)>=0));
+ let html='<div class="table-wrap"><table><thead><tr><th><input id="allCheck" type="checkbox" style="width:20px;height:20px"></th>'+
+  fs.map(f=>'<th title="'+esc(f[3]||'')+'">'+esc(f[0])+(f[1]?'<span class="required"> *</span>':'')+(f[2]?'<br><small style="opacity:.75">máx. '+f[2]+'</small>':'')+'</th>').join('')+'</tr></thead><tbody>';
+ html+=vis.map(o=>{
+  const dupe=dup.cont[norm(o.r[dup.chave])]>1;
+  return '<tr data-row="'+o.i+'" class="'+(isValid(o.r)?'':'invalid')+(dupe?' dupe':'')+'">'+
+   '<td><input class="rowCheck" type="checkbox" data-i="'+o.i+'" style="width:20px;height:20px">'+
+   '<div class="row" style="gap:2px;margin-top:3px"><button class="btn sm" style="padding:4px 6px" data-edit="'+o.i+'" title="Editar">✎</button>'+
+   '<button class="btn sm" style="padding:4px 6px" data-dup="'+o.i+'" title="Duplicar">⧉</button></div></td>'+
+   fs.map(f=>'<td>'+controle(o.r,o.i,f)+'</td>').join('')+'</tr>';
+ }).join('');
+ html+='</tbody></table></div>';
+ if(vis.length<d.length) html+='<p class="kv" style="margin-top:8px">Mostrando '+vis.length+' de '+d.length+' linhas (filtro ativo).</p>';
+ el('tableHost').innerHTML=html;
+
+ el('tableHost').querySelectorAll('[data-key]').forEach(x=>{
+  x.addEventListener('input',onCell);
+  x.addEventListener('change',onCell);
+ });
+ el('tableHost').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>abrirForm(+b.dataset.edit));
+ el('tableHost').querySelectorAll('[data-dup]').forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.dup;data().splice(i+1,0,Object.assign({},data()[i]));persist();render();
+ });
+ el('tableHost').querySelectorAll('.rowCheck').forEach(c=>c.onchange=()=>{
+  const tr=c.closest('tr');if(tr)tr.classList.toggle('sel',c.checked);
+ });
+ const ac=el('allCheck');
+ if(ac)ac.onchange=()=>el('tableHost').querySelectorAll('.rowCheck').forEach(c=>{c.checked=ac.checked;c.dispatchEvent(new Event('change'))});
+ atualizarKpis();
+}
+let saveTimer=null;
+function onCell(e){
+ const t=e.target,i=+t.dataset.i,k=t.dataset.key;
+ data()[i][k]=t.value;
+ const f=fields().find(x=>x[0]===k);
+ if(f&&f[1])t.classList.toggle('miss',!String(t.value).trim());
+ const tr=t.closest('tr');
+ if(tr)tr.classList.toggle('invalid',!isValid(data()[i]));
+ clearTimeout(saveTimer);saveTimer=setTimeout(persist,400);
+}
+function selecionadas(){return [].slice.call(document.querySelectorAll('.rowCheck:checked')).map(c=>+c.dataset.i)}
+
+/* =========================================================================
+   FORMULÁRIO
+   ========================================================================= */
+function abrirForm(i,pre){
+ editIndex=(i==null?null:i);
+ const r=(i==null)?Object.assign(comContexto(),pre||{}):data()[i];
+ el('formTitle').textContent=(i==null)?'Nova linha':'Editar linha '+(i+1);
+ el('formFields').innerHTML=fields().map(f=>{
+  const key=f[0],opts=optsFor(key);let ctrl;
+  if(opts)ctrl='<select data-form="'+esc(key)+'">'+opts.map(o=>'<option '+(o===r[key]?'selected':'')+'>'+esc(o)+'</option>').join('')+'</select>';
+  else if(f[2]&&f[2]<=25)ctrl='<input data-form="'+esc(key)+'" maxlength="'+f[2]+'" value="'+esc(r[key]||'')+'">';
+  else ctrl='<textarea data-form="'+esc(key)+'" '+(f[2]?'maxlength="'+f[2]+'"':'')+'>'+esc(r[key]||'')+'</textarea>';
+  let extra='';
+  if(abaAtiva()==='energy'&&key==='DESCRIÇÃO DA FONTE')extra='<div class="chips" id="srcChips"></div>';
+  if(['ACIONAMENTO LOCAL','DEPENDENTE A MONTANTE','DEPENDENTE A JUSANTE'].indexOf(key)>=0)
+   extra='<div class="chips"><span class="chip" data-set="'+esc(key)+'|Não">Não</span></div>';
+  return '<div class="field"><label>'+esc(key)+(f[1]?' *':'')+(f[2]?' <small>máx. '+f[2]+'</small>':'')+'</label>'+ctrl+extra+
+         (f[3]?'<div class="kv" style="margin-top:4px">'+esc(f[3])+'</div>':'')+'</div>';
+ }).join('');
+ el('formFields').querySelectorAll('[data-set]').forEach(c=>c.onclick=()=>{
+  const p=c.dataset.set.split('|');const campo=el('formFields').querySelector('[data-form="'+p[0].replace(/"/g,'')+'"]');if(campo)campo.value=p[1];
+ });
+ if(abaAtiva()==='energy'){
+  const sel=el('formFields').querySelector('[data-form="TIPO DE ENERGIA"]');
+  if(sel){sel.addEventListener('change',chipsFonte);chipsFonte()}
+ }
  el('formModal').classList.add('open');
 }
-function renderSrcChips(){let box=el('srcChips');if(!box)return;let t=el('formFields').querySelector('[data-form="TIPO DE ENERGIA"]').value;let list=sourceSuggestions[t]||[];box.innerHTML=list.length?('<small style="width:100%;color:var(--muted)">Sugestões (toque para inserir):</small>'+list.map(s=>'<span class="chip">'+esc(s)+'</span>').join('')):'';box.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{let ta=el('formFields').querySelector('[data-form="DESCRIÇÃO DA FONTE"]');ta.value=ta.value?ta.value+'; '+c.textContent:c.textContent})}
-function closeModals(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('open'));stopCamera()}
-
-/* ---------- Import / Export ---------- */
-function importExcel(f){if(!LIBS.xlsx){alert('A biblioteca de Excel não carregou. Verifique a conexão e recarregue a página.');return}
- let rd=new FileReader();rd.onload=e=>{try{let wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
-  function read(name,keys){let ws=null;Object.keys(wb.Sheets).forEach(n=>{if(norm(n)===norm(name))ws=wb.Sheets[n]});if(!ws)return null;let rows=XLSX.utils.sheet_to_json(ws,{defval:'',raw:false});let ok=rows.filter(r=>keys.some(k=>String(r[k]||'').trim()));if(ok.length)return ok.map(r=>{let o={};keys.forEach(k=>o[k]=String(r[k]||''));return o});let aoa=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});let hi=aoa.findIndex(row=>keys.filter(k=>row.some(c=>norm(c)===norm(k))).length>=2);if(hi>=0)return aoa.slice(hi+1).filter(r=>r.some(Boolean)).map(r=>{let o={};keys.forEach((k,j)=>o[k]=String(r[j]||''));return o});return null}
-  let m=read('Matriz de bloqueio',matrixFields.map(f=>f[0]));let a=read('Matriz por atividade',activityFields.map(f=>f[0]));let en=read('Fontes de energia',energyFields.map(f=>f[0]));
-  if(m)state.matrix=m;if(a)state.activity=a;if(en)state.energy=en;state.source='Excel importado';persist();render();
-  if(!m&&!a&&!en)alert('Não foram encontradas as abas esperadas na planilha.')
- }catch(err){alert('Não foi possível ler o arquivo: '+err.message)}};rd.readAsArrayBuffer(f)}
-function exportExcel(){if(!LIBS.xlsx){alert('A biblioteca de Excel não carregou. Verifique a conexão e recarregue a página.');return}
- let wb=XLSX.utils.book_new();
- function make(rows,fs){let s=XLSX.utils.json_to_sheet(rows.length?rows:[Object.fromEntries(fs.map(f=>[f[0],'']))],{header:fs.map(f=>f[0])});s['!cols']=fs.map(f=>({wch:Math.min(42,Math.max(16,f[0].length*0.8))}));return s}
- XLSX.utils.book_append_sheet(wb,make(state.matrix,matrixFields),'Matriz de bloqueio');
- XLSX.utils.book_append_sheet(wb,make(state.energy,energyFields),'Fontes de energia');
- XLSX.utils.book_append_sheet(wb,make(state.activity,activityFields),'Matriz por atividade');
- XLSX.writeFile(wb,'Matriz_de_Bloqueio_Preenchida.xlsx')}
-
-/* ---------- Câmera / OCR ---------- */
-function startCamera(){el('cameraModal').classList.add('open');el('preview').classList.add('hidden');el('video').classList.remove('hidden');el('retryBtn').classList.add('hidden');el('ocrText').value='';el('progressBar').style.width='0';
- if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){el('ocrText').value='Este navegador/servidor não permite acesso à câmera. Use “Usar imagem” para selecionar uma foto.';return}
- navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false}).then(s=>{stream=s;el('video').srcObject=s}).catch(()=>{el('ocrText').value='A câmera não pôde ser aberta. Libere a permissão do navegador ou use “Usar imagem”.'})}
-function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}}
-function useImage(src){el('preview').src=src;el('preview').classList.remove('hidden');el('video').classList.add('hidden');el('retryBtn').classList.remove('hidden');stopCamera();runOcr(src)}
-function runOcr(src){if(!LIBS.ocr||typeof Tesseract==='undefined'){el('ocrText').value='O reconhecimento automático (OCR) não está disponível agora. Digite o texto manualmente neste campo.';return}
- el('ocrText').value='Reconhecendo texto...';el('progressBar').style.width='2%';
- Tesseract.recognize(src,'por',{logger:m=>{if(m.progress)el('progressBar').style.width=Math.round(m.progress*100)+'%'}}).then(res=>{el('ocrText').value=(res.data.text||'').trim();el('progressBar').style.width='100%'}).catch(()=>{el('ocrText').value='Não foi possível reconhecer o texto. Digite manualmente neste campo.'})}
-function suggest(text){let out={},lines=text.split(/\n+/).map(x=>x.trim()).filter(Boolean);
- fields().forEach(f=>{let key=f[0],nk=norm(key),found=lines.find(l=>norm(l).indexOf(nk)===0);if(found)out[key]=found.replace(/^.*?[:\-]\s*/,'').trim()});
- let tags=text.match(/\b[A-Z]{1,5}-[A-Z0-9]{2,}(?:-[A-Z0-9]{1,})+\b/gi)||[];
- let nt=norm(text);let en=energyTypes.slice(1).find(x=>nt.indexOf(norm(x))>=0);
- if(current==='matrix'){if(tags[0])out['TAG DO PONTO DE BLOQUEIO']=tags[0].toUpperCase();if(tags[1])out['EQUIPAMENTO']=tags[1].toUpperCase();if(en)out['TIPO DE ENERGIA']=en}
- if(current==='energy'){if(tags[0])out['EQUIPAMENTO / TAG']=tags[0].toUpperCase();if(en)out['TIPO DE ENERGIA']=en}
- if(current==='activity'){if(tags[0])out['TAG DO PONTO DE BLOQUEIO']=tags[0].toUpperCase();if(tags[1])out['EQUIPAMENTO']=tags[1].toUpperCase()}
- return out}
-
-/* ---------- Inicialização (à prova de falhas) ---------- */
-function bind(){
- el('manualBtn').onclick=()=>openForm();
- el('addRowBtn').onclick=()=>openForm();
- el('search').oninput=render;
- el('cameraBtn').onclick=startCamera;
- el('exportBtn').onclick=exportExcel;
- el('fileInput').onchange=e=>{if(e.target.files[0])importExcel(e.target.files[0]);e.target.value=''};
- el('backupBtn').onclick=()=>{let b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='backup_matriz_bloqueio.json';a.click();URL.revokeObjectURL(u)};
- el('jsonInput').onchange=e=>{let f=e.target.files[0];if(!f)return;let rd=new FileReader();rd.onload=ev=>{try{let x=JSON.parse(ev.target.result);if(!Array.isArray(x.matrix))throw 0;state={matrix:x.matrix||[],energy:x.energy||[],activity:x.activity||[],source:'Backup restaurado'};persist();render()}catch(_){alert('Backup inválido.')}};rd.readAsText(f);e.target.value=''};
- el('clearBtn').onclick=()=>{if(confirm('Apagar todos os dados salvos neste navegador?')){state={matrix:[],energy:[],activity:[],source:'Manual'};persist();render()}};
- el('deleteBtn').onclick=()=>{let ids=[].slice.call(document.querySelectorAll('.rowCheck:checked')).map(c=>+c.dataset.i).sort((a,b)=>b-a);ids.forEach(i=>data().splice(i,1));if(ids.length){persist();render()}};
- el('saveFormBtn').onclick=()=>{let r=blank();el('formFields').querySelectorAll('[data-form]').forEach(x=>r[x.dataset.form]=x.value.trim());if(editIndex==null)data().push(r);else data()[editIndex]=r;persist();closeModals();render()};
- el('shotBtn').onclick=()=>{let c=el('canvas'),v=el('video');c.width=v.videoWidth||1280;c.height=v.videoHeight||720;c.getContext('2d').drawImage(v,0,0);useImage(c.toDataURL('image/jpeg',0.92))};
- el('imageInput').onchange=e=>{let f=e.target.files[0];if(f)useImage(URL.createObjectURL(f));e.target.value=''};
- el('retryBtn').onclick=startCamera;
- el('reviewBtn').onclick=()=>{let p=suggest(el('ocrText').value);closeModals();openForm(null,p)};
- document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeModals);
- document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{current=t.dataset.sheet;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));el('search').value='';render()});
+function chipsFonte(){
+ const box=el('srcChips');if(!box)return;
+ const t=el('formFields').querySelector('[data-form="TIPO DE ENERGIA"]').value;
+ const lista=sourceSuggestions[t]||[];
+ box.innerHTML=lista.length?('<small style="width:100%;color:var(--muted)">Sugestões — toque para inserir:</small>'+lista.map(s=>'<span class="chip">'+esc(s)+'</span>').join('')):'';
+ box.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{
+  const ta=el('formFields').querySelector('[data-form="DESCRIÇÃO DA FONTE"]');
+  ta.value=ta.value?ta.value+'; '+c.textContent:c.textContent;
+ });
 }
+function fecharModais(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('open'));pararCamera()}
+
+/* =========================================================================
+   CÂMERA — captura em série
+   ========================================================================= */
+let stream=null, track=null, torchOn=false, devices=[], devIdx=0;
+async function abrirCamera(){
+ el('cameraModal').classList.add('open');
+ el('camMsg').textContent='';
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+  el('camMsg').textContent='Este navegador não libera a câmera aqui. Use "Galeria" para enviar fotos já tiradas. A câmera exige acesso por HTTPS ou por localhost.';
+  return;
+ }
+ try{
+  const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});
+  aplicarStream(s);
+  devices=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput');
+  el('swapBtn').classList.toggle('hidden',devices.length<2);
+ }catch(err){
+  el('camMsg').textContent='A câmera não abriu ('+(err.name||'erro')+'). Libere a permissão do navegador ou use "Galeria".';
+ }
+}
+function aplicarStream(s){
+ pararCamera();
+ stream=s;track=s.getVideoTracks()[0];
+ el('video').srcObject=s;
+ const cap=track.getCapabilities?track.getCapabilities():{};
+ el('torchBtn').classList.toggle('hidden',!cap.torch);
+ const z=el('zoom');
+ if(cap.zoom){z.classList.remove('hidden');z.min=cap.zoom.min;z.max=cap.zoom.max;z.step=cap.zoom.step||0.1;z.value=track.getSettings().zoom||cap.zoom.min}
+ else z.classList.add('hidden');
+ torchOn=false;el('torchBtn').classList.remove('on');
+}
+function pararCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;track=null}}
+async function trocarCamera(){
+ if(!devices.length)return;
+ devIdx=(devIdx+1)%devices.length;
+ try{aplicarStream(await navigator.mediaDevices.getUserMedia({video:{deviceId:{exact:devices[devIdx].deviceId},width:{ideal:1920}},audio:false}))}catch(e){}
+}
+async function alternarLanterna(){
+ if(!track)return;
+ try{torchOn=!torchOn;await track.applyConstraints({advanced:[{torch:torchOn}]});el('torchBtn').classList.toggle('on',torchOn)}
+ catch(e){el('camMsg').textContent='Este aparelho não permite ligar a lanterna pelo navegador.'}
+}
+function disparar(){
+ const v=el('video'),c=el('canvas');
+ if(!v.videoWidth){el('camMsg').textContent='A câmera ainda não está pronta.';return}
+ c.width=v.videoWidth;c.height=v.videoHeight;
+ c.getContext('2d').drawImage(v,0,0);
+ addFoto(c.toDataURL('image/jpeg',0.82));
+ el('flash').classList.remove('on');void el('flash').offsetWidth;el('flash').classList.add('on');
+ if(navigator.vibrate)navigator.vibrate(28);
+}
+function addFoto(dataUrl){
+ fotos.push({id:uid(),dataUrl,ts:Date.now(),perfil:perfilAtual,texto:'',status:'wait'});
+ pintarStrip();atualizarKpis();
+}
+function pintarStrip(){
+ el('camCount').textContent=fotos.length+(fotos.length===1?' foto':' fotos');
+ el('strip').innerHTML=fotos.map(f=>
+  '<div class="thumb"><img src="'+f.dataUrl+'"><button class="x" data-del="'+f.id+'">✕</button><div class="st '+f.status+'">'+rotulo(f.status)+'</div></div>').join('');
+ el('strip').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{fotos=fotos.filter(x=>x.id!==b.dataset.del);pintarStrip();atualizarKpis()});
+}
+const rotulo=s=>({wait:'fila',run:'lendo',ok:'lido',err:'erro'}[s]||s);
+async function carregarArquivos(files){
+ for(const f of files){
+  const url=await comprimir(f);
+  if(url)addFoto(url);
+ }
+ pintarStrip();
+}
+function comprimir(file,maxLado){
+ return new Promise(res=>{
+  const fr=new FileReader();
+  fr.onload=()=>{
+   const img=new Image();
+   img.onload=()=>{
+    const L=maxLado||1800, fator=Math.min(1,L/Math.max(img.width,img.height));
+    const c=document.createElement('canvas');
+    c.width=Math.round(img.width*fator);c.height=Math.round(img.height*fator);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    res(c.toDataURL('image/jpeg',0.82));
+   };
+   img.onerror=()=>res(null);
+   img.src=fr.result;
+  };
+  fr.onerror=()=>res(null);
+  fr.readAsDataURL(file);
+ });
+}
+
+/* =========================================================================
+   OCR — pré-tratamento + leitura em lote
+   ========================================================================= */
+let worker=null, cancelar=false;
+function tratar(dataUrl){
+ return new Promise(res=>{
+  const img=new Image();
+  img.onload=()=>{
+   const alvo=1900, f=Math.min(2.2,Math.max(1,alvo/Math.max(img.width,img.height)));
+   const c=document.createElement('canvas');
+   c.width=Math.round(img.width*f);c.height=Math.round(img.height*f);
+   const x=c.getContext('2d');x.drawImage(img,0,0,c.width,c.height);
+   const d=x.getImageData(0,0,c.width,c.height), p=d.data;
+   let min=255,max=0;
+   for(let i=0;i<p.length;i+=4){const g=(p[i]*.3+p[i+1]*.59+p[i+2]*.11)|0;p[i]=p[i+1]=p[i+2]=g;if(g<min)min=g;if(g>max)max=g}
+   const amp=Math.max(1,max-min);
+   for(let i=0;i<p.length;i+=4){
+    let g=(p[i]-min)*255/amp;
+    g=g<118?g*0.55:(g>150?255-(255-g)*0.55:g);
+    p[i]=p[i+1]=p[i+2]=g<0?0:g>255?255:g;
+   }
+   x.putImageData(d,0,0);
+   res(c.toDataURL('image/jpeg',0.9));
+  };
+  img.onerror=()=>res(dataUrl);
+  img.src=dataUrl;
+ });
+}
+async function obterWorker(){
+ if(worker)return worker;
+ worker=await Tesseract.createWorker('por',1,{});
+ await worker.setParameters({preserve_interword_spaces:'1'});
+ return worker;
+}
+async function lerFotos(alvo){
+ const fila=(alvo||fotos).filter(f=>f.status!=='ok');
+ if(!fila.length){alert('Não há fotos pendentes de leitura.');return}
+ if(!LIBS.ocr||typeof Tesseract==='undefined'){
+  alert('A leitura automática (OCR) não carregou. Abra a foto, digite o texto e extraia as linhas manualmente.');
+  return;
+ }
+ cancelar=false;
+ el('cameraModal').classList.remove('open');pararCamera();
+ el('ocrModal').classList.add('open');
+ el('ocrGo').disabled=true;
+ el('ocrBar').style.width='0';
+ pintarOcrLista(fila);
+ try{
+  el('ocrStep').textContent='Preparando o reconhecimento (primeira vez baixa o idioma, pode demorar).';
+  const w=await obterWorker();
+  for(let i=0;i<fila.length;i++){
+   if(cancelar)break;
+   const f=fila[i];f.status='run';pintarOcrLista(fila);
+   el('ocrStep').textContent='Foto '+(i+1)+' de '+fila.length+'…';
+   try{
+    const img=await tratar(f.dataUrl);
+    const r=await w.recognize(img);
+    f.texto=(r.data.text||'').trim();
+    f.status=f.texto?'ok':'err';
+   }catch(err){f.status='err';f.texto=''}
+   el('ocrBar').style.width=Math.round((i+1)/fila.length*100)+'%';
+   pintarOcrLista(fila);
+  }
+  el('ocrStep').textContent=cancelar?'Leitura interrompida.':'Leitura concluída.';
+  el('ocrGo').disabled=false;
+ }catch(err){
+  el('ocrStep').textContent='Falha no reconhecimento: '+(err.message||err);
+ }
+ pintarStrip();pintarFotos();
+}
+function pintarOcrLista(fila){
+ el('ocrList').innerHTML=fila.map(f=>{
+  const n=f.status==='ok'?extrair(f).length:0;
+  return '<div class="item"><img src="'+f.dataUrl+'"><div class="txt"><b>'+perfilNome(f.perfil)+'</b><span>'+
+   (f.status==='ok'?(n+' linha(s) identificada(s)'):rotulo(f.status))+'</span></div>'+
+   '<span class="badge '+(f.status==='ok'?'ok':f.status==='err'?'err':'warn')+'">'+rotulo(f.status)+'</span></div>';
+ }).join('');
+}
+const perfilNome=p=>({painel:'Painel / cubículos',placa:'Placa do equipamento',lista:'Lista ou tabela'}[p]||'Foto');
+
+/* =========================================================================
+   EXTRAÇÃO — várias linhas por foto
+   ========================================================================= */
+const RX_TAG=/\b[A-Z]{2,4}[-–—][A-Z0-9]{2,8}(?:[-–—][A-Z0-9]{1,6}){1,3}\b/g;
+function limparTag(t){
+ return String(t).toUpperCase().replace(/[–—]/g,'-').replace(/\s+/g,'').replace(/[.,;:]+$/,'');
+}
+function acharTags(texto){
+ const alto=texto.toUpperCase().replace(/[|]/g,'-');
+ const brutos=alto.match(RX_TAG)||[];
+ const vistos={},saida=[];
+ brutos.forEach(t=>{
+  const c=limparTag(t);
+  if(c.length<7)return;
+  if(!/\d/.test(c))return;          // TAG sem número é quase sempre ruído
+  if(/^(NBR|NR|ISO|IEC|ABNT|PRO|IEEE)-/.test(c))return;
+  if(!vistos[c]){vistos[c]=1;saida.push(c)}
+ });
+ return saida;
+}
+const segmentos=t=>t.split('-');
+const pai=t=>{const s=segmentos(t);return s.length>2?s.slice(0,-1).join('-'):t};
+function detectarEnergia(texto){
+ const n=norm(texto);
+ for(let i=1;i<energyTypes.length;i++) if(n.indexOf(norm(energyTypes[i]))>=0) return energyTypes[i];
+ if(/\d+([.,]\d+)?\s?K?V\b/.test(n)||/\bDISJUNTOR|CUBICULO|CUBÍCULO|CCM|QGBT|MOTOR|TRAFO|TRANSFORMADOR|PAINEL/.test(n))return 'ELÉTRICA';
+ if(/\bAR COMPRIMIDO|PNEUMAT|COMPRESSOR|BAR\b/.test(n))return 'PNEUMÁTICA';
+ if(/\bHIDRAUL|CILINDRO|BOMBA\b/.test(n))return 'HIDRÁULICA';
+ if(/\bVAPOR|CALDEIRA|TEMPERATURA|AQUECID/.test(n))return 'TÉRMICA';
+ return '';
+}
+function detectarTensao(texto){
+ const m=texto.toUpperCase().match(/\b\d{1,3}([.,]\d{1,2})?\s?KV\b|\b\d{3,4}\s?V\b/);
+ return m?m[0].replace(/\s+/g,''):'';
+}
+function residual(texto){
+ const n=norm(texto);
+ if(/CAPACITOR|BANCO DE BATERIA|BATERIA|NO-BREAK|NOBREAK|ACUMULADOR|MOLA|INVERSOR|UPS/.test(n))return 'Sim';
+ return '';
+}
+function funcaoPorPrefixo(tag){
+ const p=segmentos(tag)[0];
+ return (prefixos[p]&&prefixos[p].f)||'';
+}
+/* corta no limite de caracteres sem partir palavra */
+function cortar(t,max){
+ t=String(t||'').trim();
+ if(!max||t.length<=max)return t;
+ const c=t.slice(0,max);
+ const i=c.lastIndexOf(' ');
+ return (i>max*0.5?c.slice(0,i):c).trim();
+}
+/* "ENTRADA 13.8KV" -> "Entrada 13.8kV" */
+function humanizar(t){
+ t=String(t||'').replace(/\s{2,}/g,' ').trim();
+ if(!t)return '';
+ if(t===t.toUpperCase())t=t.charAt(0)+t.slice(1).toLowerCase();
+ return t.replace(/(\d)\s?kv\b/gi,'$1kV').replace(/(\d)\s?v\b/gi,'$1V')
+         .replace(/(\d)\s?a\b/gi,'$1A').replace(/(\d)\s?hz\b/gi,'$1Hz')
+         .replace(/(\d)\s?cv\b/gi,'$1CV').replace(/(\d)\s?kw\b/gi,'$1kW');
+}
+/* descrição da função a partir da própria linha lida; recorre ao prefixo se não houver */
+const ruido=/^(CUBICULO|CUBÍCULO|PAINEL|COLUNA|ITEM|GAVETA|CELULA|CÉLULA|QUADRO|N[º°.]?|POS|POSICAO|POSIÇÃO)\s+/i;
+function textoFuncao(contexto,tag,textoTodo){
+ let resto=String(contexto||'').replace(RX_TAG,' ').replace(/[|;:]+/g,' ').replace(/\s{2,}/g,' ').trim();
+ while(ruido.test(resto))resto=resto.replace(ruido,'').trim();
+ resto=resto.replace(/^[-–—.,]+/,'').trim();
+ if(resto.length>=3)return cortar(humanizar(resto),25);
+ const tensao=detectarTensao(contexto)||detectarTensao(textoTodo||'');
+ return cortar((funcaoPorPrefixo(tag)+(tensao?' '+humanizar(tensao):'')).trim(),25);
+}
+function acharFabricante(texto){
+ const n=norm(texto);
+ const f=fabricantes.find(x=>n.indexOf(norm(x))>=0);
+ return f||'';
+}
+function acharCampo(texto,rotulos){
+ const linhas=texto.split(/\n+/);
+ for(const l of linhas){
+  for(const r of rotulos){
+   const rx=new RegExp('^\\s*'+r+'\\s*[:\\-]\\s*(.+)$','i');
+   const m=l.match(rx);
+   if(m&&m[1].trim())return m[1].trim().slice(0,40);
+  }
+ }
+ return '';
+}
+/* devolve lista de linhas candidatas para a aba ativa */
+function extrair(foto){
+ const texto=foto.texto||'';
+ if(!texto.trim())return [];
+ const c=state.ctx, tags=acharTags(texto), energia=detectarEnergia(texto)||c.energia;
+ const saida=[];
+ if(abaAtiva()!=='matrix'){
+  // abas auxiliares: uma linha por TAG
+  tags.forEach(t=>{
+   const o=comContexto();
+   if(abaAtiva()==='energy'){o['EQUIPAMENTO / TAG']=t;o['TIPO DE ENERGIA']=energia;o['PONTO DE BLOQUEIO']=pai(t);o['EXISTE ENERGIA RESIDUAL? S/N']=residual(texto)}
+   else{o['TAG DO PONTO DE BLOQUEIO']=t;o['EQUIPAMENTO']=c.equip||pai(t);o['TIPO DE BLOQUEIO']='Bloqueio'}
+   o._foto=foto.id;o._conf='média';
+   saida.push(o);
+  });
+  return saida;
+ }
+
+ /* ---- perfil PLACA: um equipamento, com modelo e fabricante ---- */
+ if(foto.perfil==='placa'){
+  const o=comContexto();
+  const t=tags[0]||'';
+  o['TAG DO PONTO DE BLOQUEIO']=cortar(t,25);
+  o['EQUIPAMENTO']=cortar(c.equip||(t?pai(t):''),25);
+  o['LOCAL DO BLOQUEIO']=cortar(t?pai(t):'',25);
+  o['LOCAL DO EQUIPAMENTO']=cortar(c.local||o['EQUIPAMENTO'],25);
+  o['TIPO DE ENERGIA']=energia;
+  o['Modelo do Equipamento']=acharCampo(texto,['MODELO','MOD','TIPO','TYPE','MODEL']);
+  o['Fabricante do Equipamento']=acharFabricante(texto)||acharCampo(texto,['FABRICANTE','MARCA','MANUFACTURER']);
+  const tensao=detectarTensao(texto);
+  o['FUNÇÃO DO EQUIPAMENTO']=cortar((funcaoPorPrefixo(t)+(tensao?' '+humanizar(tensao):'')).trim(),25);
+  o['EXISTE ENERGIA RESIDUAL? S/N']=residual(texto);
+  o._foto=foto.id;o._conf=t?'alta':'baixa';
+  return [o];
+ }
+
+ /* ---- perfil LISTA: uma linha por linha de texto que contenha TAG ---- */
+ if(foto.perfil==='lista'){
+  texto.split(/\n+/).forEach(l=>{
+   const ts=acharTags(l);
+   if(!ts.length)return;
+   const o=comContexto();
+   const ponto=ts[ts.length-1];
+   o['TAG DO PONTO DE BLOQUEIO']=cortar(ponto,25);
+   o['EQUIPAMENTO']=cortar(ts.length>1?ts[0]:(c.equip||pai(ponto)),25);
+   o['LOCAL DO BLOQUEIO']=cortar(pai(ponto),25);
+   o['LOCAL DO EQUIPAMENTO']=cortar(c.local||o['EQUIPAMENTO'],25);
+   o['TIPO DE ENERGIA']=detectarEnergia(l)||energia;
+   o['FUNÇÃO DO EQUIPAMENTO']=textoFuncao(l,ponto,texto);
+   o['EXISTE ENERGIA RESIDUAL? S/N']=residual(l);
+   o._foto=foto.id;o._conf='média';
+   saida.push(o);
+  });
+  return saida;
+ }
+
+ /* ---- perfil PAINEL: TAG mais curta vira equipamento, as demais viram pontos ---- */
+ let equip=c.equip;
+ const raiz=tags.filter(t=>segmentos(t).length<=3);
+ const marcadas=tags.filter(t=>{const p=segmentos(t)[0];return prefixos[p]&&prefixos[p].pai});
+ if(!equip)equip=(marcadas[0]||raiz[0]||'');
+ const pontos=tags.filter(t=>t!==equip);
+ const alvo=pontos.length?pontos:tags;
+ const linhasTexto=texto.split(/\n+/);
+ const alertaResidual=residual(texto)==='Sim';
+ alvo.forEach(t=>{
+  const o=comContexto();
+  const contexto=linhasTexto.find(l=>l.toUpperCase().indexOf(t)>=0)||'';
+  o['EQUIPAMENTO']=cortar(equip||pai(t),25);
+  o['TAG DO PONTO DE BLOQUEIO']=cortar(t,25);
+  o['LOCAL DO BLOQUEIO']=cortar(pai(t),25);
+  o['LOCAL DO EQUIPAMENTO']=cortar(c.local||equip||pai(t),25);
+  o['TIPO DE ENERGIA']=detectarEnergia(contexto)||energia;
+  o['FUNÇÃO DO EQUIPAMENTO']=textoFuncao(contexto,t,texto);
+  o['EXISTE ENERGIA RESIDUAL? S/N']=residual(contexto);
+  o._foto=foto.id;
+  o._conf=(segmentos(t).length>=3&&equip)?'alta':'média';
+  if(!o['EXISTE ENERGIA RESIDUAL? S/N']&&alertaResidual)o._aviso='a foto cita fonte com energia armazenada';
+  saida.push(o);
+ });
+ return saida;
+}
+
+/* ---------- revisão dos candidatos ---------- */
+function abrirCandidatos(lista){
+ candidatos=lista;
+ if(!candidatos.length){
+  alert('Nenhuma TAG foi reconhecida nas fotos. Abra a foto na aba "Fotos", corrija o texto e extraia novamente.');
+  return;
+ }
+ const chave=abaAtiva()==='matrix'?'TAG DO PONTO DE BLOQUEIO':abaAtiva()==='energy'?'EQUIPAMENTO / TAG':'TAG DO PONTO DE BLOQUEIO';
+ const existentes={};data().forEach(r=>{const t=norm(r[chave]);if(t)existentes[t]=1});
+ candidatos.forEach(c=>{c._dup=!!existentes[norm(c[chave])];c._on=!c._dup});
+ el('candNotice').innerHTML='<b>'+candidatos.length+' linha(s)</b> identificada(s). Confira TAG, tipo de energia e função antes de adicionar. Energia residual, método de teste e dispositivo de bloqueio continuam por sua conta — o aplicativo não inventa esses campos.';
+ pintarCandidatos();
+ el('ocrModal').classList.remove('open');
+ el('candModal').classList.add('open');
+}
+function pintarCandidatos(){
+ const chave=abaAtiva()==='matrix'?'TAG DO PONTO DE BLOQUEIO':abaAtiva()==='energy'?'EQUIPAMENTO / TAG':'TAG DO PONTO DE BLOQUEIO';
+ const mostrar=abaAtiva()==='matrix'
+  ? ['EQUIPAMENTO','TAG DO PONTO DE BLOQUEIO','FUNÇÃO DO EQUIPAMENTO','LOCAL DO BLOQUEIO','TIPO DE ENERGIA','EXISTE ENERGIA RESIDUAL? S/N']
+  : fields().map(f=>f[0]).slice(0,6);
+ el('candHost').innerHTML=candidatos.map((c,i)=>
+  '<div class="cand '+(c._on?'':'off')+'" data-c="'+i+'">'+
+   '<div class="top"><input type="checkbox" data-on="'+i+'" '+(c._on?'checked':'')+'>'+
+   '<span class="tag">'+esc(c[chave]||'(sem TAG)')+'</span>'+
+   '<span class="badge '+(c._conf==='alta'?'ok':c._conf==='baixa'?'err':'warn')+'">confiança '+c._conf+'</span>'+
+   (c._dup?'<span class="badge warn">já existe</span>':'')+
+   (c._aviso?'<span class="badge warn">'+esc(c._aviso)+'</span>':'')+'</div>'+
+   '<div class="mini">'+mostrar.map(k=>{
+     const opts=optsFor(k);
+     return '<div><label>'+esc(k)+'</label>'+(opts
+      ?'<select data-ci="'+i+'" data-ck="'+esc(k)+'">'+opts.map(o=>'<option '+(o===c[k]?'selected':'')+'>'+esc(o)+'</option>').join('')+'</select>'
+      :'<input data-ci="'+i+'" data-ck="'+esc(k)+'" value="'+esc(c[k]||'')+'">')+'</div>';
+    }).join('')+'</div>'+
+  '</div>').join('');
+ el('candHost').querySelectorAll('[data-on]').forEach(x=>x.onchange=()=>{
+  candidatos[+x.dataset.on]._on=x.checked;
+  x.closest('.cand').classList.toggle('off',!x.checked);
+ });
+ el('candHost').querySelectorAll('[data-ck]').forEach(x=>x.oninput=()=>{candidatos[+x.dataset.ci][x.dataset.ck]=x.value});
+ el('candHost').querySelectorAll('select[data-ck]').forEach(x=>x.onchange=()=>{candidatos[+x.dataset.ci][x.dataset.ck]=x.value});
+}
+
+/* =========================================================================
+   IMPORTAR / EXPORTAR
+   ========================================================================= */
+function importar(file){
+ if(!LIBS.xlsx){alert('A biblioteca de Excel não carregou. Verifique a conexão e recarregue a página.');return}
+ const fr=new FileReader();
+ fr.onload=e=>{
+  try{
+   const bytes=new Uint8Array(e.target.result);
+   const wb=XLSX.read(bytes,{type:'array'});
+   template=bytes.slice(0);
+   const ler=(nome,fs)=>{
+    let ws=null;Object.keys(wb.Sheets).forEach(n=>{if(norm(n)===norm(nome))ws=wb.Sheets[n]});
+    if(!ws)return null;
+    const keys=fs.map(f=>f[0]);
+    const aoa=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});
+    const hi=aoa.findIndex(l=>keys.filter(k=>l.some(c=>norm(c)===norm(k))).length>=3);
+    if(hi<0)return null;
+    const cab=aoa[hi].map(norm);
+    const mapa=keys.map(k=>cab.indexOf(norm(k)));
+    return aoa.slice(hi+1)
+      .filter(l=>l.some(v=>String(v).trim()))
+      .map(l=>{const o={};keys.forEach((k,j)=>{o[k]=mapa[j]>=0?String(l[mapa[j]]||'').trim():''});return o})
+      .filter(o=>keys.some(k=>o[k]&&!/^OK\s*-?\s*\d+$/i.test(o[k])&&!/^obrigat|^campos futuros|^opcional/i.test(o[k])));
+   };
+   const m=ler('Matriz de bloqueio',matrixFields);
+   const a=ler('Matriz por atividade',activityFields);
+   const en=ler('Fontes de energia',energyFields);
+   if(m)state.matrix=m;if(a)state.activity=a;if(en)state.energy=en;
+   if(!m&&!a&&!en){alert('As abas esperadas não foram encontradas. O modelo oficial fica guardado mesmo assim para a exportação.');}
+   else{state.source='Planilha importada';}
+   el('expTplHint').textContent='';
+   persist();render();
+   if(m&&m.length){const p=m[0];state.ctx.complexo=state.ctx.complexo||p['COMPLEXO']||'';state.ctx.unidade=state.ctx.unidade||p['UNIDADE OU SITE']||'';persist()}
+  }catch(err){alert('Não foi possível ler o arquivo: '+err.message)}
+ };
+ fr.readAsArrayBuffer(file);
+}
+function limpo(rows,fs){return rows.map(r=>{const o={};fs.forEach(f=>o[f[0]]=String(r[f[0]]==null?'':r[f[0]]));return o})}
+function exportarSimples(){
+ if(!LIBS.xlsx)return alert('A biblioteca de Excel não carregou.');
+ const wb=XLSX.utils.book_new();
+ const faz=(rows,fs)=>{
+  const s=XLSX.utils.json_to_sheet(rows.length?limpo(rows,fs):[Object.fromEntries(fs.map(f=>[f[0],'']))],{header:fs.map(f=>f[0])});
+  s['!cols']=fs.map(f=>({wch:Math.min(44,Math.max(15,f[0].length*0.85))}));
+  return s;
+ };
+ XLSX.utils.book_append_sheet(wb,faz(state.matrix,matrixFields),'Matriz de bloqueio');
+ XLSX.utils.book_append_sheet(wb,faz(state.activity,activityFields),'Matriz por atividade');
+ XLSX.utils.book_append_sheet(wb,faz(state.energy,energyFields),'Fontes de energia');
+ XLSX.writeFile(wb,'Matriz_de_Bloqueio_'+carimbo()+'.xlsx');
+ fecharModais();
+}
+function exportarModelo(){
+ if(!LIBS.xlsx)return alert('A biblioteca de Excel não carregou.');
+ if(!template)return alert('Importe primeiro o anexo oficial para usar esta opção.');
+ try{
+  const wb=XLSX.read(template,{type:'array',cellStyles:true});
+  gravar(wb,'Matriz de bloqueio',matrixFields,state.matrix,7);
+  gravar(wb,'Matriz por atividade',activityFields,state.activity,6);
+  XLSX.writeFile(wb,'Matriz_de_Bloqueio_'+carimbo()+'.xlsx',{cellStyles:true});
+  fecharModais();
+ }catch(err){alert('Falha ao gravar no modelo: '+err.message)}
+}
+function gravar(wb,nome,fs,rows,linhaInicio){
+ const chave=Object.keys(wb.Sheets).find(n=>norm(n)===norm(nome));
+ if(!chave)return;
+ const ws=wb.Sheets[chave];
+ const ref=XLSX.utils.decode_range(ws['!ref']||'A1:A1');
+ const ultCol=Math.max(ref.e.c,fs.length-1);
+ for(let R=linhaInicio-1;R<=ref.e.r;R++)
+  for(let C=0;C<=ultCol;C++) delete ws[XLSX.utils.encode_cell({r:R,c:C})];
+ const aoa=rows.map(r=>fs.map(f=>String(r[f[0]]==null?'':r[f[0]])));
+ if(aoa.length)XLSX.utils.sheet_add_aoa(ws,aoa,{origin:{r:linhaInicio-1,c:0}});
+ ws['!ref']=XLSX.utils.encode_range({s:{r:0,c:0},e:{r:Math.max(ref.e.r,linhaInicio-2+aoa.length),c:ultCol}});
+}
+function exportarCsv(){
+ const fs=fields(), rows=data();
+ const linha=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+ const txt=[fs.map(f=>linha(f[0])).join(';')].concat(rows.map(r=>fs.map(f=>linha(r[f[0]])).join(';'))).join('\r\n');
+ baixar(new Blob(['\ufeff'+txt],{type:'text/csv;charset=utf-8'}),'matriz_'+current+'_'+carimbo()+'.csv');
+ fecharModais();
+}
+function carimbo(){const d=new Date();return d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'_'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0')}
+function baixar(blob,nome){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=nome;a.click();setTimeout(()=>URL.revokeObjectURL(u),3000)}
+
+/* =========================================================================
+   ABA DE FOTOS
+   ========================================================================= */
+function pintarFotos(){
+ el('fotoInfo').textContent=fotos.length?(fotos.length+' foto(s) nesta sessão · '+fotos.filter(f=>f.status==='ok').length+' lida(s)'):'Nenhuma foto nesta sessão.';
+ if(!fotos.length){el('fotosHost').innerHTML='<div class="empty"><b>Sem fotos.</b>Use “Capturar em série” para fotografar vários pontos seguidos ou envie imagens da galeria.</div>';return}
+ el('fotosHost').innerHTML='<div class="list">'+fotos.map(f=>{
+  const n=f.status==='ok'?extrair(f).length:0;
+  return '<div class="item"><img src="'+f.dataUrl+'" data-ver="'+f.id+'" style="cursor:pointer">'+
+   '<div class="txt"><b>'+perfilNome(f.perfil)+' · '+new Date(f.ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'</b>'+
+   '<span>'+(f.status==='ok'?(n+' linha(s) para esta aba'):rotulo(f.status))+'</span></div>'+
+   '<div class="row" style="gap:4px"><button class="btn sm" data-ver="'+f.id+'">Texto</button>'+
+   '<button class="btn sm primary" data-ext="'+f.id+'">Extrair</button>'+
+   '<button class="btn sm danger" data-rm="'+f.id+'">✕</button></div></div>';
+ }).join('')+'</div>';
+ el('fotosHost').querySelectorAll('[data-ver]').forEach(b=>b.onclick=()=>verTexto(b.dataset.ver));
+ el('fotosHost').querySelectorAll('[data-ext]').forEach(b=>b.onclick=()=>{
+  const f=fotos.find(x=>x.id===b.dataset.ext);
+  if(!f)return;
+  if(f.status!=='ok'){lerFotos([f]);return}
+  abrirCandidatos(extrair(f));
+ });
+ el('fotosHost').querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{fotos=fotos.filter(x=>x.id!==b.dataset.rm);pintarFotos();atualizarKpis()});
+}
+let fotoAberta=null;
+function verTexto(id){
+ const f=fotos.find(x=>x.id===id);if(!f)return;
+ fotoAberta=f;
+ el('textImg').src=f.dataUrl;
+ el('textArea').value=f.texto||'';
+ el('textModal').classList.add('open');
+}
+
+/* =========================================================================
+   AÇÕES DA PLANILHA
+   ========================================================================= */
+function preencherMassa(){
+ const fs=fields(), sel=selecionadas();
+ bulkTarget=sel.length?'sel':'all';
+ el('bulkScope').textContent=sel.length?('Aplicando a '+sel.length+' linha(s) selecionada(s).'):'Nenhuma linha selecionada — a aplicação valerá para todas as '+data().length+' linhas da aba.';
+ el('bulkCol').innerHTML=fs.map(f=>'<option>'+esc(f[0])+'</option>').join('');
+ montarValorMassa();
+ el('bulkModal').classList.add('open');
+}
+function montarValorMassa(){
+ const k=el('bulkCol').value, opts=optsFor(k), f=fields().find(x=>x[0]===k);
+ el('bulkValHost').innerHTML=opts
+  ?'<select id="bulkVal">'+opts.map(o=>'<option>'+esc(o)+'</option>').join('')+'</select>'
+  :'<input id="bulkVal" '+(f&&f[2]?'maxlength="'+f[2]+'"':'')+'>';
+}
+function aplicarMassa(){
+ const k=el('bulkCol').value, v=el('bulkVal').value, soVazio=el('bulkOnlyEmpty').checked;
+ const alvo=bulkTarget==='sel'?selecionadas():data().map((_,i)=>i);
+ let n=0;
+ alvo.forEach(i=>{const r=data()[i];if(soVazio&&String(r[k]||'').trim())return;r[k]=v;n++});
+ persist();render();fecharModais();
+ el('saveStatus').textContent=n+' célula(s) preenchida(s)';
+}
+function repetirAbaixo(){
+ const sel=selecionadas();
+ const base=sel.length?sel[0]:0;
+ const d=data();
+ if(!d.length)return;
+ if(!confirm('Copiar os valores da linha '+(base+1)+' para todas as linhas abaixo, apenas onde estiver vazio?'))return;
+ const modelo=d[base];
+ for(let i=base+1;i<d.length;i++) fields().forEach(f=>{if(!String(d[i][f[0]]||'').trim())d[i][f[0]]=modelo[f[0]]});
+ persist();render();
+}
+function completarNao(){
+ if(abaAtiva()!=='matrix')return alert('Esta ação vale para a aba Matriz de bloqueio.');
+ if(!confirm('Preencher "Não" nos campos Acionamento local, Dependente a montante e Dependente a jusante que estiverem vazios? Confirme em campo antes de exportar.'))return;
+ let n=0;
+ data().forEach(r=>['ACIONAMENTO LOCAL','DEPENDENTE A MONTANTE','DEPENDENTE A JUSANTE'].forEach(k=>{if(!String(r[k]||'').trim()){r[k]='Não';n++}}));
+ persist();render();
+ el('saveStatus').textContent=n+' campo(s) preenchido(s) com "Não"';
+}
+function gerarSerie(){
+ const base=limparTag(el('srBase').value.trim());
+ const pre=el('srPre').value.trim().toUpperCase();
+ const de=parseInt(el('srDe').value,10), ate=parseInt(el('srAte').value,10), dig=parseInt(el('srDig').value,10);
+ if(!base)return alert('Informe a TAG base.');
+ if(isNaN(de)||isNaN(ate)||ate<de)return alert('Verifique o intervalo.');
+ if(ate-de>199)return alert('Limite de 200 linhas por série.');
+ const energia=el('srEnergia').value;
+ const novas=[];
+ for(let i=de;i<=ate;i++){
+  const t=base+'-'+pre+String(i).padStart(dig,'0');
+  const o=comContexto();
+  o['TAG DO PONTO DE BLOQUEIO']=t;
+  o['LOCAL DO BLOQUEIO']=base;
+  o['EQUIPAMENTO']=state.ctx.equip||base;
+  o['LOCAL DO EQUIPAMENTO']=state.ctx.local||state.ctx.equip||base;
+  o['TIPO DE ENERGIA']=energia;
+  o['FUNÇÃO DO EQUIPAMENTO']=funcaoPorPrefixo(base);
+  novas.push(o);
+ }
+ state.matrix=state.matrix.concat(novas);
+ state.source='Série gerada';
+ current='matrix';marcarAba();persist();render();fecharModais();
+}
+function previewSerie(){
+ const base=limparTag(el('srBase').value.trim())||'TAG-BASE';
+ const pre=el('srPre').value.trim().toUpperCase();
+ const de=parseInt(el('srDe').value,10)||0, ate=parseInt(el('srAte').value,10)||0, dig=parseInt(el('srDig').value,10)||2;
+ const n=Math.max(0,ate-de+1);
+ el('srPrev').textContent=n?(n+' linha(s): '+base+'-'+pre+String(de).padStart(dig,'0')+' … '+base+'-'+pre+String(ate).padStart(dig,'0')):'Intervalo inválido.';
+}
+
+/* =========================================================================
+   NAVEGAÇÃO E LIGAÇÕES
+   ========================================================================= */
+function marcarAba(){
+ if(current!=='fotos')lastSheet=current;
+ document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.sheet===current));
+ const fotosView=current==='fotos';
+ el('sheetPanel').classList.toggle('hidden',fotosView);
+ el('fotosPanel').classList.toggle('hidden',!fotosView);
+ el('kpis').classList.toggle('hidden',fotosView);
+ if(fotosView)pintarFotos();else render();
+}
+function ligar(){
+ // abas
+ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{current=t.dataset.sheet;el('search').value='';marcarAba()});
+ // barra principal
+ el('cameraBtn').onclick=abrirCamera;
+ el('manualBtn').onclick=()=>abrirForm();
+ el('addRowBtn').onclick=()=>abrirForm();
+ el('serieBtn').onclick=()=>{el('srEnergia').value=state.ctx.energia||'ELÉTRICA';previewSerie();el('serieModal').classList.add('open')};
+ el('search').oninput=render;
+ el('ctxBtn').onclick=abrirContexto;
+ el('bulkBtn').onclick=preencherMassa;
+ el('fillDownBtn').onclick=repetirAbaixo;
+ el('defaultsBtn').onclick=completarNao;
+ el('deleteBtn').onclick=()=>{
+  const ids=selecionadas().sort((a,b)=>b-a);
+  if(!ids.length)return alert('Marque as linhas que deseja excluir.');
+  if(!confirm('Excluir '+ids.length+' linha(s)?'))return;
+  ids.forEach(i=>data().splice(i,1));persist();render();
+ };
+ el('exportBtn').onclick=()=>{
+  const pend=data().filter(r=>!isValid(r)).length;
+  el('expWarn').innerHTML=pend?'<div class="notice">Existem <b>'+pend+' linha(s)</b> com campos obrigatórios em branco nesta aba. A exportação segue assim mesmo, mas a planilha pode ser recusada na validação.</div>':'<div class="notice info">Todas as linhas desta aba estão com os campos obrigatórios preenchidos.</div>';
+  el('expTemplate').disabled=!template;
+  el('expTplHint').textContent=template?'':'(importe o anexo primeiro)';
+  el('expModal').classList.add('open');
+ };
+ el('expTemplate').onclick=exportarModelo;
+ el('expSimple').onclick=exportarSimples;
+ el('expCsv').onclick=exportarCsv;
+ el('fileInput').onchange=e=>{if(e.target.files[0])importar(e.target.files[0]);e.target.value=''};
+ el('imageInput').onchange=async e=>{if(e.target.files.length){await carregarArquivos(e.target.files);e.target.value='';current='fotos';marcarAba();lerFotos()}};
+ el('imageInput2').onchange=async e=>{if(e.target.files.length){await carregarArquivos(e.target.files);e.target.value=''}};
+ el('backupBtn').onclick=()=>baixar(new Blob([JSON.stringify({v:6,state,fotos:fotos.map(f=>({id:f.id,ts:f.ts,perfil:f.perfil,texto:f.texto,status:f.status}))},null,2)],{type:'application/json'}),'backup_matriz_'+carimbo()+'.json');
+ el('jsonInput').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const fr=new FileReader();
+  fr.onload=ev=>{try{
+    const x=JSON.parse(ev.target.result);
+    const s=x.state||x;
+    if(!Array.isArray(s.matrix))throw new Error('formato');
+    state=Object.assign(padrao(),s);state.source='Backup restaurado';
+    persist();marcarAba();
+   }catch(_){alert('Este arquivo não é um backup válido do aplicativo.')}};
+  fr.readAsText(f);e.target.value='';
+ };
+ el('clearBtn').onclick=()=>{
+  if(!confirm('Apagar todas as linhas e fotos guardadas neste navegador? Faça um backup antes.'))return;
+  state=padrao();fotos=[];template=null;persist();marcarAba();
+ };
+ el('saveFormBtn').onclick=()=>{
+  const r=vazia();
+  el('formFields').querySelectorAll('[data-form]').forEach(x=>r[x.dataset.form]=x.value.trim());
+  if(editIndex==null)data().push(r);else data()[editIndex]=Object.assign(data()[editIndex],r);
+  persist();fecharModais();render();
+ };
+ // câmera
+ el('shotBtn').onclick=disparar;
+ el('torchBtn').onclick=alternarLanterna;
+ el('swapBtn').onclick=trocarCamera;
+ el('zoom').oninput=e=>{if(track)track.applyConstraints({advanced:[{zoom:parseFloat(e.target.value)}]}).catch(()=>{})};
+ el('doneBtn').onclick=()=>{if(!fotos.filter(f=>f.status!=='ok').length)return alert('Nenhuma foto nova para ler.');lerFotos()};
+ el('perfilSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  perfilAtual=b.dataset.perfil;
+  el('perfilSeg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+ });
+ // ocr
+ el('ocrCancel').onclick=()=>{cancelar=true};
+ el('ocrGo').onclick=()=>{
+  const todas=[];fotos.filter(f=>f.status==='ok').forEach(f=>extrair(f).forEach(c=>todas.push(c)));
+  abrirCandidatos(dedup(todas));
+ };
+ el('ocrAllBtn').onclick=()=>lerFotos();
+ el('extractAllBtn').onclick=()=>{
+  const todas=[];fotos.filter(f=>f.status==='ok').forEach(f=>extrair(f).forEach(c=>todas.push(c)));
+  abrirCandidatos(dedup(todas));
+ };
+ el('fotosClearBtn').onclick=()=>{if(confirm('Excluir todas as fotos desta sessão?')){fotos=[];pintarFotos();atualizarKpis()}};
+ // candidatos
+ el('candAll').onclick=()=>{candidatos.forEach(c=>c._on=true);pintarCandidatos()};
+ el('candNone').onclick=()=>{candidatos.forEach(c=>c._on=false);pintarCandidatos()};
+ el('candDupes').onclick=()=>{candidatos.forEach(c=>{if(c._dup)c._on=false});pintarCandidatos()};
+ el('candApply').onclick=()=>{
+  const sel=candidatos.filter(c=>c._on);
+  if(!sel.length)return alert('Marque ao menos uma linha.');
+  sel.forEach(c=>{const o={};fields().forEach(f=>o[f[0]]=c[f[0]]||'');data().push(o)});
+  state.source='Foto + revisão';
+  persist();fecharModais();render();
+  el('saveStatus').textContent=sel.length+' linha(s) adicionada(s)';
+ };
+ // texto
+ el('textSave').onclick=()=>{if(fotoAberta){fotoAberta.texto=el('textArea').value;fotoAberta.status=fotoAberta.texto.trim()?'ok':'err';pintarFotos();fecharModais()}};
+ el('textExtract').onclick=()=>{
+  if(!fotoAberta)return;
+  fotoAberta.texto=el('textArea').value;fotoAberta.status=fotoAberta.texto.trim()?'ok':'err';
+  abrirCandidatos(extrair(fotoAberta));
+ };
+ // contexto
+ el('ctxSave').onclick=()=>{lerContexto();persist();fecharModais();render()};
+ el('ctxApply').onclick=()=>{
+  lerContexto();const c=state.ctx;let n=0;
+  state.matrix.forEach(r=>{
+   const map={'COMPLEXO':c.complexo,'UNIDADE OU SITE':c.unidade,'EQUIPAMENTO':c.equip,'LOCAL DO EQUIPAMENTO':c.local,'TIPO DE ENERGIA':c.energia};
+   Object.keys(map).forEach(k=>{if(map[k]&&!String(r[k]||'').trim()){r[k]=map[k];n++}});
+  });
+  state.activity.forEach(r=>{if(c.sap&&!String(r['LOCAL DE INSTALAÇÃO - SAP']||'').trim()){r['LOCAL DE INSTALAÇÃO - SAP']=c.sap;n++}});
+  persist();fecharModais();render();
+  el('saveStatus').textContent=n+' campo(s) preenchido(s) pelo contexto';
+ };
+ // série / massa
+ ['srBase','srPre','srDe','srAte','srDig'].forEach(id=>el(id).oninput=previewSerie);
+ el('srGo').onclick=gerarSerie;
+ el('bulkCol').onchange=montarValorMassa;
+ el('bulkGo').onclick=aplicarMassa;
+ document.querySelectorAll('[data-close]').forEach(b=>b.onclick=fecharModais);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharModais()});
+}
+function dedup(lista){
+ const chave=abaAtiva()==='matrix'?'TAG DO PONTO DE BLOQUEIO':abaAtiva()==='energy'?'EQUIPAMENTO / TAG':'TAG DO PONTO DE BLOQUEIO';
+ const vistos={},saida=[];
+ lista.forEach(c=>{const t=norm(c[chave]);if(t&&vistos[t])return;if(t)vistos[t]=1;saida.push(c)});
+ return saida;
+}
+function abrirContexto(){
+ const c=state.ctx;
+ el('ctxComplexo').value=c.complexo;el('ctxUnidade').value=c.unidade;el('ctxEquip').value=c.equip;
+ el('ctxLocal').value=c.local;el('ctxEnergia').value=c.energia||'ELÉTRICA';el('ctxSap').value=c.sap;
+ el('ctxModal').classList.add('open');
+}
+function lerContexto(){
+ state.ctx={complexo:el('ctxComplexo').value.trim(),unidade:el('ctxUnidade').value.trim(),equip:el('ctxEquip').value.trim(),
+            local:el('ctxLocal').value.trim(),energia:el('ctxEnergia').value,sap:el('ctxSap').value.trim()};
+}
+
+/* ---------- inicialização ---------- */
 function boot(){
- try{bind();render();el('saveStatus').textContent='Dados salvos localmente';}catch(err){el('libBanner').classList.remove('hidden');el('libBanner').textContent='Erro ao iniciar: '+err.message}
- // Carregar bibliotecas externas sem travar a interface
- loadScript(['https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js']).then(ok=>{LIBS.xlsx=ok;if(!ok){el('libBanner').classList.remove('hidden');el('libBanner').textContent='Aviso: importação/exportação de Excel indisponível (falha ao carregar biblioteca). O preenchimento manual e o backup JSON continuam funcionando.'}});
- loadScript(['https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js','https://unpkg.com/tesseract.js@5/dist/tesseract.min.js']).then(ok=>{LIBS.ocr=ok});
+ try{
+  ['ctxEnergia','srEnergia'].forEach(id=>el(id).innerHTML=energyTypes.map(o=>'<option>'+esc(o)+'</option>').join(''));
+  ligar();marcarAba();
+  el('saveStatus').textContent='Dados salvos neste aparelho';
+ }catch(err){aviso('Erro ao iniciar: '+err.message);console.error(err)}
+ loadScript(['https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'])
+  .then(ok=>{LIBS.xlsx=ok;if(!ok)aviso('Importação e exportação de Excel indisponíveis: a biblioteca não carregou. O preenchimento, o backup e o CSV continuam funcionando.')});
+ loadScript(['https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js','https://unpkg.com/tesseract.js@5/dist/tesseract.min.js'])
+  .then(ok=>{LIBS.ocr=ok});
+ window.addEventListener('beforeunload',e=>{if(fotos.length){e.preventDefault();e.returnValue=''}});
 }
 window.addEventListener('DOMContentLoaded',boot);
-window.addEventListener('error',e=>{console.warn('Erro capturado:',e.message)});
+window.addEventListener('error',e=>console.warn('Erro capturado:',e.message));
 </script>
 </body>
 </html>
