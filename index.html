@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#007E7A">
+<title>DiagElétrica Vale — Check de Campo (NR-10 / PNR)</title>
+<style>
+:root{
+--verde:#007E7A;--verde2:#00615e;--amarelo:#ECB11F;--cinza:#919191;--cinzaC:#f2f4f7;
+--bg:#f4f7fb;--card:#fff;--line:#d8e0ea;--txt:#17202a;--muted:#667085;
+--green:#14804a;--red:#b42318;--yellow:#a15c00;--purple:#6941c6;--blue:#1d5fa7}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body{padding-bottom:82px}
+.top{background:var(--verde);color:#fff;padding:14px 14px;position:sticky;top:0;z-index:10}
+.top h1{font-size:17px;margin:0;display:flex;align-items:center;gap:8px}
+.top p{font-size:11px;margin:4px 0 0;color:#d7f0ef}
+.badge{background:var(--amarelo);color:#3a2c00;font-size:10px;font-weight:800;padding:2px 7px;border-radius:99px}
+main{max-width:820px;margin:auto;padding:12px}.page{display:none}.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+h2{font-size:17px;margin:0 0 10px}h3{font-size:14px;margin:14px 0 8px}.muted{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:600px){.grid{grid-template-columns:1fr}}
+label{font-size:12px;font-weight:700;color:#344054;display:block;margin-bottom:9px}
+input,select,textarea{font:inherit;font-size:16px;width:100%;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px;padding:11px;background:#fff;color:var(--txt)}
+textarea{min-height:78px}
+.btn{border:0;border-radius:10px;min-height:46px;padding:11px 14px;font-weight:800;font-size:14px;background:var(--verde);color:#fff;cursor:pointer}
+.btn.secondary{background:#edf2f7;color:#17202a}.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn.amar{background:var(--amarelo);color:#3a2c00}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.actions .btn{flex:1;min-width:130px}
+.progress{height:8px;background:#e8edf3;border-radius:99px;overflow:hidden;margin:9px 0}.progress i{display:block;height:100%;background:var(--verde);width:0;transition:.3s}
+.normtabs{display:flex;gap:7px;overflow:auto;margin-bottom:10px;padding-bottom:4px}
+.normtabs button{white-space:nowrap;padding:9px 11px;border:1px solid var(--line);background:#fff;border-radius:9px;font-weight:800;font-size:12px;cursor:pointer}
+.normtabs button.active{background:var(--verde);color:#fff;border-color:var(--verde)}
+.checkrow{border:1px solid var(--line);border-radius:12px;padding:11px;margin:8px 0}
+.checkrow strong{font-size:13px;display:block}
+.ref{font-size:10.5px;color:var(--verde2);font-weight:800;margin-top:3px}
+.checkrow select{margin-top:8px}
+.ev{border:1px solid var(--line);border-radius:10px;padding:9px;margin-top:8px}.ev img{width:100%;max-height:230px;object-fit:cover;border-radius:8px;margin-top:7px}
+.tag{display:inline-block;padding:4px 8px;border-radius:99px;font-size:10px;font-weight:800;margin-top:5px}
+.tag.green{background:#dcfae6;color:#067647}.tag.red{background:#fee4e2;color:#b42318}.tag.gray{background:#f2f4f7;color:#475467}
+.tag.blue{background:#e0f2fe;color:#075985}.tag.purple{background:#f4ebff;color:#6941c6}.tag.yellow{background:#fff1d6;color:#a15c00}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.kpi{border:1px solid var(--line);border-radius:11px;padding:11px;text-align:center}.kpi b{display:block;font-size:24px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:20}
+.bottom button{flex:1;border:0;background:#fff;padding:9px 2px;font-size:9.5px;font-weight:800;color:#475467;cursor:pointer}
+.bottom button.active{color:var(--verde)}.bottom span{display:block;font-size:19px}
+.notice{padding:10px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;font-size:12px}
+.safe{padding:10px;border-radius:10px;background:#ecfdf3;border:1px solid #abefc6;font-size:12px}
+.danger{padding:10px;border-radius:10px;background:#fef3f2;border:1px solid #fecdca;font-size:12px}
+.photo-btn{display:flex;align-items:center;justify-content:center;min-height:52px;border:2px dashed #8fc7c4;border-radius:11px;background:#f2fbfa;color:var(--verde2);font-weight:900;cursor:pointer}
+.photo-input{display:none}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid var(--line);padding:7px;text-align:left;vertical-align:top}th{background:#f2f4f7}
+.step{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:11px;margin:8px 0}
+.step .n{min-width:34px;height:34px;border-radius:50%;background:var(--verde);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}
+.step.done .n{background:var(--green)}
+.pill{display:inline-block;background:var(--cinzaC);border-radius:99px;padding:3px 9px;font-size:11px;font-weight:700;margin:2px 3px 0 0}
+.linkref{font-size:11px;color:var(--blue);text-decoration:none;font-weight:700}
+@media print{.top,.bottom,.no-print{display:none!important}body{padding:0;background:#fff}.card{break-inside:avoid;box-shadow:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>⚡ DiagElétrica Vale <span class="badge">v2.0</span></h1>
+  <p>Relatório de campo p/ adequações elétricas • NR-10 • NBR 5410/5419 • PNR Vale • RAC 10 (PRO-041951)</p>
+</header>
+
+<main>
+<!-- ============ INÍCIO ============ -->
+<section id="home" class="page active">
+  <div class="card">
+    <h2>Nova inspeção de campo</h2>
+    <div class="safe"><b>Regra de ouro do diagnóstico:</b> a ferramenta <b>não inventa</b> tensão, corrente, bitola, potência, energia incidente, aterramento, DPS, DR, SPDA, medições ou referências normativas. O que não for comprovado em campo permanece <b>pendente</b>. Nunca marque “Conforme” por ausência de evidência.</div>
+    <div class="actions" style="margin-top:10px">
+      <button class="btn" id="newBtn">+ Iniciar inspeção</button>
+      <button class="btn secondary" id="resumeBtn">Continuar atual</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Como usar (passo a passo)</h2>
+    <div class="muted">
+      <b>1.</b> Identifique a instalação → <b>2.</b> Confira os <b>6 passos da desenergização</b> (se houver intervenção) → <b>3.</b> Tire fotos → <b>4.</b> Responda os checklists por norma/PNR → <b>5.</b> Registre medições reais → <b>6.</b> Liste as adequações → <b>7.</b> Gere e envie o relatório.
+    </div>
+  </div>
+  <div class="card">
+    <h2>Base normativa desta ferramenta</h2>
+    <span class="pill">NR-10</span><span class="pill">NR-06 (EPI)</span><span class="pill">NR-12</span><span class="pill">NR-35</span><span class="pill">NBR 5410</span><span class="pill">NBR 14039</span><span class="pill">NBR 5419</span><span class="pill">NBR 5460</span>
+    <div style="margin-top:6px">
+    <span class="pill">PNR-000051 Energia Incidente</span><span class="pill">PNR-000052 Aterramento/PDA</span><span class="pill">PNR-000053 Sist. Elétricos</span><span class="pill">PNR-000080 Proteção</span><span class="pill">PNR-000131 Painéis</span><span class="pill">PNR-000138 Transformadores</span><span class="pill">PNR-000149 Subestações</span><span class="pill">PNR-000188 Redes/LT</span><span class="pill">PNR-000222 Cabeamento</span>
+    </div>
+    <div style="margin-top:6px">
+    <span class="pill">PNR-000069 RAC</span><span class="pill">PNR-000031 PTS</span><span class="pill">PNR-000068 ART</span><span class="pill">PRO-041951 RAC 10</span>
+    </div>
+    <p class="muted" style="margin-top:8px">Referências confirmadas na base normativa da Vale (Gestão de Ativos) e legislação vigente. Confirme sempre a revisão publicada no SISPAV / portal NR-10 da unidade.</p>
+  </div>
+</section>
+
+<!-- ============ IDENTIFICAÇÃO + FOTOS ============ -->
+<section id="dados" class="page">
+  <div class="card"><h2>1. Identificação da instalação</h2>
+    <div class="grid">
+      <label>Unidade / Site<input id="cliente" placeholder="Ex.: Tubarão EFVM, Cariacica/ES"></label>
+      <label>Local / TAG / Subestação<input id="local" placeholder="Ex.: SE-01, CCM-05, Painel QGBT"></label>
+      <label>Fiscal / Responsável técnico<input id="resp"></label>
+      <label>Matrícula<input id="matricula"></label>
+      <label>Contrato / OS-OM<input id="contrato"></label>
+      <label>Data<input id="data" type="date"></label>
+      <label>Tipo de instalação<select id="tipo"><option>Não identificado</option><option>Subestação</option><option>Sala elétrica / CCM</option><option>Painel / QGBT</option><option>Rede de distribuição / LT</option><option>Transformador</option><option>Predial / administrativo</option><option>Industrial (processo)</option><option>Climatização</option><option>Outro</option></select></label>
+      <label>Nível de tensão<select id="tensao"><option>Não identificada</option><option>Baixa Tensão (≤ 1 kV)</option><option>127 V</option><option>220 V</option><option>380/220 V</option><option>440 V</option><option>Média Tensão (1 a 36,2 kV) — NBR 14039</option><option>13,8 kV</option><option>Alta Tensão / SEP (&gt; 36,2 kV)</option><option>Outro</option></select></label>
+      <label>Origem da tensão (fonte do dado)<select id="fonteT"><option>Não identificada</option><option>Placa do equipamento</option><option>Projeto / diagrama unifilar</option><option>Medição em campo</option><option>Informada pela operação</option></select></label>
+    </div>
+    <label>Haverá intervenção com desenergização? (RAC 10)
+      <select id="intervencao"><option>Não — somente inspeção visual</option><option>Sim — trabalho desenergizado (6 passos)</option><option>Sim — trabalho energizado (exige aprovação e ART, PRO-041951 item 11)</option></select></label>
+    <label>Observações gerais<textarea id="obs"></textarea></label>
+  </div>
+
+  <div class="card"><h2>2. Evidência fotográfica</h2>
+    <label class="photo-btn" for="camera">📷 Tirar foto com a câmera</label>
+    <input class="photo-input" id="camera" type="file" accept="image/*" capture="environment">
+    <label class="photo-btn" for="gallery" style="margin-top:8px">🖼️ Selecionar da galeria</label>
+    <input class="photo-input" id="gallery" type="file" accept="image/*" multiple>
+    <div id="photos"></div>
+  </div>
+  <div class="actions"><button class="btn" onclick="go('loto')">Ir para 6 passos →</button></div>
+</section>
+
+<!-- ============ 6 PASSOS DA DESENERGIZAÇÃO ============ -->
+<section id="loto" class="page">
+  <div class="card">
+    <h2>3. Seis passos da desenergização</h2>
+    <div class="danger"><b>Atenção (PNR-000069 / PRO-041951 item 9):</b> se <b>não</b> for possível aplicar integralmente os 6 passos, o circuito <b>NÃO</b> é considerado desenergizado — trata-se de <b>trabalho energizado</b> (NR-10 10.6 / PRO-041951 11.1), exigindo procedimento específico, ART e aprovação do gestor. Em caso de dúvida: <b>NÃO EXECUTE — acione seu líder.</b></div>
+    <div id="loto-steps"></div>
+    <div class="notice" style="margin-top:8px">Sequência conforme NR-10 (item 10.5.1) e RAC 04 (Bloqueio, Identificação e Zero Energia). O teste de ausência de tensão deve ser feito <b>individualmente por cada executante</b> e repetido a cada reinício (refeição, troca de turno, nova jornada).</div>
+  </div>
+  <div class="actions"><button class="btn" onclick="go('check')">Ir para checklists →</button></div>
+</section>
+
+<!-- ============ CHECKLIST ============ -->
+<section id="check" class="page">
+  <div class="card">
+    <h2>4. Checklist por norma / PNR</h2>
+    <div class="notice">Cada norma tem seu <b>próprio</b> resultado. Um item da NBR 5410 não altera o resultado do SPDA (NBR 5419) e vice-versa. Selecione a situação real observada em campo.</div>
+    <div class="normtabs" id="normtabs"></div>
+    <div class="progress"><i id="bar"></i></div>
+    <div id="checklist"></div>
+  </div>
+  <div class="card"><h2>Evidência do item selecionado</h2>
+    <p class="muted">Se o item depender de medição/documento não realizado, marque a pendência correspondente. Vincule uma foto se houver.</p>
+    <label>Foto associada<select id="photoLink"><option>Sem foto associada</option></select></label>
+    <label>Justificativa / evidência<textarea id="just" placeholder="Descreva o que foi observado (ex.: DR ausente no circuito de tomadas; barramento sem identificação; etc.)"></textarea></label>
+  </div>
+  <div class="actions"><button class="btn" onclick="go('medicoes')">Ir para medições →</button></div>
+</section>
+
+<!-- ============ MEDIÇÕES ============ -->
+<section id="medicoes" class="page">
+  <div class="card"><h2>5. Medições em campo</h2>
+    <div class="notice">Preencha <b>somente valores realmente medidos ou documentados</b>. O sistema não completa zeros nem estima valores.</div>
+    <div class="grid">
+      <label>Grandeza<select id="grandeza"><option>Tensão</option><option>Corrente</option><option>Resistência de aterramento (Ω)</option><option>Continuidade do PE</option><option>Resistência de isolamento (MΩ)</option><option>Energia incidente (cal/cm²)</option><option>Torque de conexão</option><option>Temperatura (termografia)</option><option>Outra</option></select></label>
+      <label>Valor<input id="valor" type="number" step="any"></label>
+      <label>Unidade<input id="unidade" placeholder="V, A, Ω, MΩ, cal/cm², °C..."></label>
+      <label>Instrumento<input id="instrumento" placeholder="Ex.: Alicate, Terrômetro, Megôhmetro"></label>
+      <label>Modelo<input id="modelo"></label>
+      <label>Nº de série<input id="serie"></label>
+      <label>Categoria do instrumento (BT: CAT III/IV)<input id="catg" placeholder="CAT III / CAT IV"></label>
+      <label>Calibração válida?<select id="calib"><option>Não verificada</option><option>Sim</option><option>Não</option></select></label>
+    </div>
+    <label>Fonte / observação<textarea id="medobs"></textarea></label>
+    <button class="btn" onclick="addMed()">Adicionar medição</button>
+    <div id="medList"></div>
+  </div>
+  <div class="actions"><button class="btn" onclick="go('resultado')">Ver diagnóstico →</button></div>
+</section>
+
+<!-- ============ RESULTADO + PLANO + CUSTOS ============ -->
+<section id="resultado" class="page">
+  <div class="card"><h2>6. Diagnóstico</h2>
+    <div class="kpis">
+      <div class="kpi"><span class="muted">Conformes</span><b id="kc">0</b></div>
+      <div class="kpi"><span class="muted">Não conformes</span><b id="knc">0</b></div>
+      <div class="kpi"><span class="muted">Pendentes</span><b id="kp">0</b></div>
+      <div class="kpi"><span class="muted">Não aplicáveis</span><b id="kna">0</b></div>
+    </div>
+  </div>
+  <div id="summary"></div>
+  <div class="card"><h2>7. Adequações / plano de ação</h2>
+    <div class="grid">
+      <label>Item / não conformidade<input id="actItem"></label>
+      <label>Prioridade<select id="actPri"><option>Alta (risco de vida / RAC)</option><option>Média</option><option>Baixa</option></select></label>
+    </div>
+    <label>Norma / PNR de referência<input id="actRef" placeholder="Ex.: NBR 5410 6.3 / PNR-000131 / NR-10 10.2"></label>
+    <label>Adequação proposta<textarea id="actDesc"></textarea></label>
+    <label>Justificativa / base técnica<textarea id="actFonte"></textarea></label>
+    <button class="btn" onclick="addAction()">Adicionar adequação</button>
+    <div id="actList"></div>
+  </div>
+  <div class="card"><h2>8. Estimativa de custo (opcional)</h2>
+    <div class="notice">Informe a <b>fonte do preço</b>. O sistema calcula quantidade × preço; não cria preços de mercado.</div>
+    <div class="grid">
+      <label>Item<input id="costItem"></label>
+      <label>Quantidade<input id="costQtd" type="number" step="any"></label>
+      <label>Unidade<input id="costUn"></label>
+      <label>Preço unitário (R$)<input id="costPU" type="number" step="any"></label>
+    </div>
+    <label>Fonte do preço<textarea id="costFonte"></textarea></label>
+    <button class="btn" onclick="addCost()">Adicionar custo</button>
+    <div id="costList"></div>
+  </div>
+  <div class="actions"><button class="btn green" onclick="go('relatorio');buildReport()">Gerar relatório →</button></div>
+</section>
+
+<!-- ============ RELATÓRIO ============ -->
+<section id="relatorio" class="page">
+  <div class="card"><h2>9. Revisão final</h2>
+    <div class="notice">Antes de enviar, revise fotos, classificações, medições, referências e pendências. O relatório <b>não</b> declara conformidade global se houver dados essenciais não verificados.</div>
+  </div>
+  <div id="report"></div>
+  <div class="card no-print"><h2>10. Enviar</h2>
+    <label>E-mail de destino<input id="email" type="email" placeholder="engenharia@vale.com"></label>
+    <label>Mensagem<textarea id="emailMsg">Segue o relatório de diagnóstico elétrico de campo para análise das adequações.</textarea></label>
+    <div class="actions">
+      <button class="btn" onclick="window.print()">📄 Imprimir / salvar PDF</button>
+      <button class="btn amar" onclick="exportJSON()">💾 Exportar dados (.json)</button>
+      <button class="btn green" onclick="sendMail()">✉️ Abrir e-mail</button>
+    </div>
+    <p class="muted" style="margin-top:9px">No celular, o botão de e-mail abre o app de e-mail com destinatário, assunto e resumo. Gere/salve o PDF antes e anexe-o no e-mail.</p>
+  </div>
+</section>
+</main>
+
+<nav class="bottom">
+  <button data-page="home"><span>⌂</span>Início</button>
+  <button data-page="dados"><span>📷</span>Campo</button>
+  <button data-page="loto"><span>🔒</span>6 Passos</button>
+  <button data-page="check"><span>✓</span>Check</button>
+  <button data-page="medicoes"><span>📏</span>Medições</button>
+  <button data-page="resultado"><span>📊</span>Diagn.</button>
+  <button data-page="relatorio"><span>📄</span>Relatório</button>
+</nav>
+
+<script>
+/* ================= ESTADO ================= */
+const S={norm:"NR10",items:{},photos:[],med:[],actions:[],costs:[],loto:{}};
+
+/* ===== 6 PASSOS (NR-10 10.5.1 / RAC 04) ===== */
+const LOTO=[
+ ["Seccionamento","Descontinuidade elétrica obtida acionando dispositivo apropriado.","NR-10 10.5.1.a"],
+ ["Bloqueio (impedimento de reenergização)","Bloqueio e etiquetagem individual do dispositivo (LOTO).","NR-10 10.5.1.b • RAC 04"],
+ ["Constatação de ausência de tensão","Verificação no ponto de intervenção com detector testado antes/depois.","NR-10 10.5.1.c"],
+ ["Aterramento temporário","Instalação do aterramento com equipotencialização dos condutores.","NR-10 10.5.1.d • PNR-000052"],
+ ["Proteção de elementos energizados","Isolação/barreiras dos elementos energizados na zona controlada.","NR-10 10.5.1.e"],
+ ["Sinalização de impedimento","Sinalização de impedimento de reenergização instalada.","NR-10 10.5.1.f"]
+];
+
+/* ===== CHECKLISTS POR NORMA / PNR (referências reais) ===== */
+const DB={
+NR10:[
+ ["Trabalhador autorizado (habilitado/qualificado/capacitado) com identificação por etiqueta","NR-10 10.8 • PRO-041951 item 7"],
+ ["Prontuário das Instalações Elétricas (PIE) atualizado e disponível","NR-10 10.2.4 • PRO-041951 item 15"],
+ ["Diagrama unifilar atualizado da instalação","NR-10 10.2.3"],
+ ["Aplicação integral dos 6 passos da desenergização (quando há intervenção)","NR-10 10.5.1 • RAC 04"],
+ ["Procedimento específico + ART para trabalho energizado (se aplicável)","NR-10 10.6 • PRO-041951 11.1 • PNR-000068"],
+ ["Estudo de energia incidente atualizado e painéis >1,2 cal/cm² sinalizados","PNR-000051 • PRO-041951 item 12"],
+ ["Vestimenta antichama com ATPV ≥ 10 cal/cm² (acesso a inst. elétricas)","PNR-000051 • PRO-041951 12.4"],
+ ["EPI/EPC e ferramentas isolantes compatíveis, inspecionados e testados","NR-10 10.4 • NR-06"],
+ ["Sinalização de segurança e identificação dos circuitos","NR-10 10.10"],
+ ["Rotas de fuga desobstruídas e portas de subestação identificadas","PNR-000127 • PRO-041951 item 16"],
+ ["PTS emitida para atividades aplicáveis (ex.: área classificada)","PNR-000031 • PRO-041951 item 11.4"]
+],
+NBR5410:[
+ ["Proteção contra choques — contato direto (partes vivas isoladas/barreiras)","NBR 5410 5.1"],
+ ["Proteção contra choques — contato indireto (seccionamento automático)","NBR 5410 5.1.2"],
+ ["Dispositivo DR em circuitos de tomadas / áreas molhadas (quando aplicável)","NBR 5410 5.1.3.2"],
+ ["Proteção contra sobrecorrentes — disjuntores/fusíveis dimensionados","NBR 5410 5.3"],
+ ["Seção/identificação dos condutores adequada à corrente de projeto","NBR 5410 6.2"],
+ ["Condutor de proteção (PE) e equipotencialização presentes","NBR 5410 6.4"],
+ ["Aterramento da instalação executado e íntegro","NBR 5410 6.4 • PNR-000052"],
+ ["DPS (proteção contra sobretensões) quando aplicável","NBR 5410 5.4"],
+ ["Quadros, barramentos e conexões — condição aparente e reaperto","NBR 5410 6.5 • PNR-000131"],
+ ["Identificação dos circuitos no quadro de distribuição","NBR 5410 6.5.4.9"]
+],
+MT:[
+ ["Instalação de média tensão conforme requisitos (1 kV a 36,2 kV)","NBR 14039"],
+ ["Distâncias de segurança e zonas de trabalho respeitadas","NBR 14039 • NR-10 Anexo II"],
+ ["Aterramento e equipotencialização de MT","NBR 14039 • PNR-000052"],
+ ["Intertravamentos e proteção dos cubículos","PNR-000131 • PNR-000149"],
+ ["Sistema de proteção (relés/ajustes) coordenado e documentado","PNR-000080"],
+ ["Terminologia e classificação conforme Sistemas Elétricos de Potência","NBR 5460 • PNR-000053"]
+],
+NBR5419:[
+ ["Documentação, projeto e ART do SPDA disponíveis","NBR 5419-1"],
+ ["Gerenciamento de risco / necessidade do SPDA avaliado","NBR 5419-2"],
+ ["Sistema de captação — condição aparente","NBR 5419-3"],
+ ["Condutores de descida — condição aparente e fixação","NBR 5419-3"],
+ ["Sistema de aterramento do SPDA — evidência/medição","NBR 5419-3 • PNR-000052"],
+ ["Equipotencialização e DPS contra surtos","NBR 5419-4 • PNR-000052"],
+ ["Corrosão / continuidade das conexões","NBR 5419-3"],
+ ["Inspeção e manutenção periódica do SPDA registradas","NBR 5419-3"]
+],
+SUBEST:[
+ ["Integridade e requisitos de ciclo de vida da subestação","PNR-000149"],
+ ["Sistema de proteção e combate a incêndio (SPCI) da subestação","PNR-000105"],
+ ["Painéis/cubículos — integridade e intertravamento","PNR-000131"],
+ ["Transformadores — condição, óleo isolante e proteção","PNR-000138"],
+ ["Aterramento / malha da subestação","PNR-000052"],
+ ["Sistemas de proteção (relés e ajustes)","PNR-000080"]
+],
+REDE:[
+ ["Redes de distribuição / linhas de transmissão — condição","PNR-000188"],
+ ["Cabeamento e infraestrutura (eletrodutos, bandejas, leitos)","PNR-000222"],
+ ["Faixa de servidão / distâncias e afastamentos","PNR-000188 • NR-10 Anexo II"],
+ ["Aterramento de estruturas e para-raios (PDA)","PNR-000052"],
+ ["Sinalização e restrição de acesso","NR-10 10.10 • PNR-000127"]
+]
+};
+const NORMS={NR10:"NR-10 / RAC 10",NBR5410:"NBR 5410 (BT)",MT:"MT / NBR 14039",NBR5419:"SPDA / NBR 5419",SUBEST:"Subestação (PNR)",REDE:"Redes / LT (PNR)"};
+
+/* ================= HELPERS ================= */
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
+function money(n){return Number(n||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function go(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");
+ document.querySelectorAll(".bottom button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ if(id==="resultado")renderResult();if(id==="relatorio")buildReport();window.scrollTo({top:0,behavior:"smooth"})}
+document.querySelectorAll(".bottom button").forEach(b=>b.onclick=()=>go(b.dataset.page));
+$("newBtn").onclick=()=>{if(confirm("Iniciar nova inspeção e apagar os dados atuais?"))location.reload()};
+$("resumeBtn").onclick=()=>go("dados");
+
+/* ===== FOTOS ===== */
+function photoAdded(file){const r=new FileReader();r.onload=()=>{S.photos.push({name:file.name,url:r.result});renderPhotos()};r.readAsDataURL(file)}
+$("camera").onchange=e=>{if(e.target.files[0])photoAdded(e.target.files[0]);e.target.value=""};
+$("gallery").onchange=e=>{[...e.target.files].slice(0,12).forEach(photoAdded);e.target.value=""};
+function renderPhotos(){$("photos").innerHTML=S.photos.map((p,i)=>`<div class="ev"><b>Foto ${i+1}</b> — ${esc(p.name)}<img src="${p.url}" alt="Evidência ${i+1}"><button class="btn red" style="margin-top:7px;min-height:38px" onclick="S.photos.splice(${i},1);renderPhotos();renderPhotoSelect()">Excluir</button></div>`).join("");renderPhotoSelect()}
+function renderPhotoSelect(){$("photoLink").innerHTML='<option>Sem foto associada</option>'+S.photos.map((p,i)=>`<option value="${i}">Foto ${i+1} — ${esc(p.name)}</option>`).join("")}
+
+/* ===== 6 PASSOS ===== */
+function renderLoto(){$("loto-steps").innerHTML=LOTO.map((s,i)=>{const k="L"+i,v=S.loto[k]||"";
+ return `<div class="step ${v==='OK'?'done':''}"><div class="n">${i+1}</div><div style="flex:1"><strong>${esc(s[0])}</strong><div class="ref">${esc(s[2])}</div><div class="muted" style="margin:4px 0">${esc(s[1])}</div>
+ <select data-k="${k}" class="loto"><option value="">— situação —</option><option ${v==='OK'?'selected':''}>OK</option><option ${v==='NÃO APLICÁVEL'?'selected':''}>NÃO APLICÁVEL</option><option ${v==='NÃO ATENDIDO'?'selected':''}>NÃO ATENDIDO</option></select></div></div>`}).join("");
+ document.querySelectorAll(".loto").forEach(sel=>sel.onchange=()=>{S.loto[sel.dataset.k]=sel.value;renderLoto()})}
+
+/* ===== NORM TABS + CHECKLIST ===== */
+function renderTabs(){$("normtabs").innerHTML=Object.keys(DB).map(n=>`<button data-n="${n}" class="${n===S.norm?'active':''}">${NORMS[n]}</button>`).join("");
+ document.querySelectorAll("#normtabs button").forEach(b=>b.onclick=()=>{S.norm=b.dataset.n;renderTabs();renderChecklist()})}
+function renderChecklist(){
+ $("checklist").innerHTML=DB[S.norm].map((row,i)=>{const k=S.norm+"_"+i,it=S.items[k]||{},v=it.status||"";
+ return `<div class="checkrow"><strong>${i+1}. ${esc(row[0])}</strong><div class="ref">📘 ${esc(row[1])}</div>
+ <select data-k="${k}" class="status">
+ <option value="">— Não verificado —</option>
+ <option ${v==="CONFORME"?"selected":""}>CONFORME</option>
+ <option ${v==="NÃO CONFORME"?"selected":""}>NÃO CONFORME</option>
+ <option ${v==="ATENÇÃO"?"selected":""}>ATENÇÃO</option>
+ <option ${v==="PENDENTE DE CAMPO"?"selected":""}>PENDENTE DE CAMPO</option>
+ <option ${v==="PENDENTE DE DOCUMENTAÇÃO"?"selected":""}>PENDENTE DE DOCUMENTAÇÃO</option>
+ <option ${v==="NÃO APLICÁVEL"?"selected":""}>NÃO APLICÁVEL</option></select>
+ <div class="muted" style="margin-top:6px">Evidência: ${esc(it.just||"não registrada")}</div></div>`}).join("");
+ document.querySelectorAll(".status").forEach(sel=>sel.onchange=()=>{const k=sel.dataset.k;S.items[k]=S.items[k]||{};S.items[k].status=sel.value;S.items[k].label=DB[S.norm][k.split("_")[1]][0];S.items[k].ref=DB[S.norm][k.split("_")[1]][1];updateProgress()});
+ updateProgress()}
+function updateProgress(){let a=Object.keys(S.items).filter(k=>k.startsWith(S.norm+"_")&&S.items[k].status).length;let n=DB[S.norm].length;$("bar").style.width=Math.min(100,a/n*100)+"%"}
+/* vincula justificativa/foto ao item atualmente em foco */
+document.addEventListener("change",e=>{if(e.target.classList&&e.target.classList.contains("status")){window._lastK=e.target.dataset.k}});
+$("just").addEventListener("input",()=>{if(window._lastK){S.items[window._lastK]=S.items[window._lastK]||{};S.items[window._lastK].just=$("just").value;const ph=$("photoLink").value;S.items[window._lastK].photo=(ph==="Sem foto associada"?"":("Foto "+(Number(ph)+1)))}});
+
+/* ===== MEDIÇÕES ===== */
+function addMed(){const v=$("valor").value;if(v==="")return alert("Informe um valor medido/documentado.");
+ S.med.push({g:$("grandeza").value,v,un:$("unidade").value,inst:$("instrumento").value,mod:$("modelo").value,ser:$("serie").value,cat:$("catg").value,cal:$("calib").value,obs:$("medobs").value});
+ renderMed();["valor","unidade","instrumento","modelo","serie","catg","medobs"].forEach(id=>$(id).value="")}
+function renderMed(){$("medList").innerHTML=S.med.map((m,i)=>`<div class="ev"><b>${esc(m.g)}:</b> ${esc(m.v)} ${esc(m.un)}<br><span class="muted">Instrumento: ${esc(m.inst)} ${esc(m.mod)} • Série: ${esc(m.ser)} • ${esc(m.cat)} • Calibração: ${esc(m.cal)}<br>${esc(m.obs)}</span><br><button class="btn red" style="min-height:38px;margin-top:6px" onclick="S.med.splice(${i},1);renderMed()">Excluir</button></div>`).join("")}
+
+/* ===== ADEQUAÇÕES ===== */
+function addAction(){if(!$("actItem").value.trim()||!$("actDesc").value.trim())return alert("Informe o item e a adequação proposta.");
+ S.actions.push({item:$("actItem").value,pri:$("actPri").value,ref:$("actRef").value,desc:$("actDesc").value,fonte:$("actFonte").value});
+ ["actItem","actRef","actDesc","actFonte"].forEach(id=>$(id).value="");renderActions()}
+function renderActions(){$("actList").innerHTML=S.actions.map((a,i)=>`<div class="ev"><b>${esc(a.item)}</b> — <span class="tag ${a.pri.startsWith('Alta')?'red':a.pri.startsWith('Média')?'yellow':'gray'}">${esc(a.pri)}</span><br><span class="ref">📘 ${esc(a.ref)||'ref. não informada'}</span><br>${esc(a.desc)}<br><span class="muted">Base: ${esc(a.fonte)||'não informada'}</span><br><button class="btn red" style="min-height:38px;margin-top:6px" onclick="S.actions.splice(${i},1);renderActions()">Excluir</button></div>`).join("")}
+
+/* ===== CUSTOS ===== */
+function addCost(){let q=Number($("costQtd").value),pu=Number($("costPU").value);if(!$("costItem").value.trim()||!(q>0)||!(pu>=0))return alert("Informe item, quantidade e preço unitário.");
+ S.costs.push({item:$("costItem").value,q,un:$("costUn").value,pu,fonte:$("costFonte").value});
+ ["costItem","costQtd","costUn","costPU","costFonte"].forEach(id=>$(id).value="");renderCosts()}
+function renderCosts(){$("costList").innerHTML=S.costs.map((c,i)=>`<div class="ev"><b>${esc(c.item)}</b>: ${c.q} ${esc(c.un)} × R$ ${money(c.pu)} = <b>R$ ${money(c.q*c.pu)}</b><br><span class="muted">Fonte: ${esc(c.fonte)||'não informada'}</span><br><button class="btn red" style="min-height:38px;margin-top:6px" onclick="S.costs.splice(${i},1);renderCosts()">Excluir</button></div>`).join("")}
+
+/* ===== RESULTADO ===== */
+function counts(){let a=Object.values(S.items),c=a.filter(x=>x.status==="CONFORME").length,
+ n=a.filter(x=>x.status==="NÃO CONFORME").length,na=a.filter(x=>x.status==="NÃO APLICÁVEL").length,
+ p=a.filter(x=>x.status&&(x.status.startsWith("PENDENTE")||x.status==="ATENÇÃO")).length;return{c,n,na,p}}
+function renderResult(){const x=counts();$("kc").textContent=x.c;$("knc").textContent=x.n;$("kp").textContent=x.p;$("kna").textContent=x.na;
+ let g=Object.keys(DB).map(norm=>{let rows=DB[norm].map((r,i)=>({r,it:S.items[norm+"_"+i]})).filter(o=>o.it&&o.it.status);
+ if(!rows.length)return"";return `<div class="card"><h3>${NORMS[norm]}</h3>${rows.map(o=>`<div class="ev"><b>${esc(o.r[0])}</b><div class="ref">📘 ${esc(o.r[1])}</div><span class="tag ${tagcls(o.it.status)}">${esc(o.it.status)}</span><br><span class="muted">${esc(o.it.just||"Sem justificativa registrada")}</span></div>`).join("")}</div>`}).join("");
+ let lot=Object.keys(S.loto).length?`<div class="card"><h3>6 passos da desenergização</h3>${LOTO.map((s,i)=>{let v=S.loto["L"+i];return v?`<div class="ev"><b>${i+1}. ${esc(s[0])}</b> <span class="tag ${v==='OK'?'green':v==='NÃO APLICÁVEL'?'gray':'red'}">${esc(v)}</span></div>`:""}).join("")}</div>`:"";
+ $("summary").innerHTML=lot+(g||`<div class="card muted">Nenhum item de checklist registrado ainda.</div>`)}
+function tagcls(s){return s==="CONFORME"?"green":s==="NÃO CONFORME"?"red":s==="NÃO APLICÁVEL"?"gray":s?.startsWith("PENDENTE")?"purple":"yellow"}
+
+/* ===== RELATÓRIO ===== */
+function buildReport(){const x=counts(),total=S.costs.reduce((a,c)=>a+c.q*c.pu,0);
+ const f=`<div class="card"><h2>RELATÓRIO DE DIAGNÓSTICO ELÉTRICO DE CAMPO</h2>
+ <p><b>Unidade:</b> ${esc($("cliente").value)||"—"}<br><b>Local/TAG:</b> ${esc($("local").value)||"—"}<br>
+ <b>Fiscal/Responsável:</b> ${esc($("resp").value)||"—"} (${esc($("matricula").value)||"s/matr."})<br>
+ <b>Contrato/OS-OM:</b> ${esc($("contrato").value)||"—"}<br><b>Data:</b> ${esc($("data").value)||"—"}<br>
+ <b>Tipo:</b> ${esc($("tipo").value)} • <b>Tensão:</b> ${esc($("tensao").value)} (fonte: ${esc($("fonteT").value)})<br>
+ <b>Intervenção:</b> ${esc($("intervencao").value)}</p>
+ <p class="muted">${esc($("obs").value)}</p></div>`;
+ const conc=x.n>0?"Foram registradas NÃO CONFORMIDADES no escopo analisado. A conclusão limita-se aos itens e evidências registrados; recomenda-se adequação conforme plano de ação.":
+   (x.p>0?"A conformidade NÃO pôde ser confirmada integralmente. Existem pendências de campo/documentação a serem sanadas.":
+   (x.c>0?"Não foram registradas não conformidades nos itens preenchidos; conclusão limitada ao escopo e às evidências registradas.":"Inspeção sem itens conclusivos registrados."));
+ const lotoR=Object.keys(S.loto).length?`<div class="card"><h2>Seis passos da desenergização</h2><table><tr><th>#</th><th>Passo</th><th>Ref.</th><th>Situação</th></tr>${LOTO.map((s,i)=>{let v=S.loto["L"+i]||"—";return `<tr><td>${i+1}</td><td>${esc(s[0])}</td><td>${esc(s[2])}</td><td>${esc(v)}</td></tr>`}).join("")}</table></div>`:"";
+ const ev=S.photos.length?`<div class="card"><h2>Registro fotográfico</h2>${S.photos.map((p,i)=>`<div class="ev"><b>Foto ${i+1}</b> — ${esc(p.name)}<img src="${p.url}" alt="Foto ${i+1}"></div>`).join("")}</div>`:"";
+ const norms=Object.keys(DB).map(norm=>{let rows=DB[norm].map((r,i)=>({r,it:S.items[norm+"_"+i]})).filter(o=>o.it&&o.it.status);if(!rows.length)return"";
+   return `<div class="card"><h2>${NORMS[norm]}</h2><table><tr><th>Verificação</th><th>Referência</th><th>Situação</th><th>Evidência</th></tr>${rows.map(o=>`<tr><td>${esc(o.r[0])}</td><td>${esc(o.r[1])}</td><td>${esc(o.it.status)}</td><td>${esc(o.it.just||"—")}</td></tr>`).join("")}</table></div>`}).join("");
+ const meds=S.med.length?`<div class="card"><h2>Medições</h2><table><tr><th>Grandeza</th><th>Valor</th><th>Instrumento</th><th>Cal.</th><th>Obs.</th></tr>${S.med.map(m=>`<tr><td>${esc(m.g)}</td><td>${esc(m.v)} ${esc(m.un)}</td><td>${esc(m.inst)} ${esc(m.mod)} (${esc(m.cat)})</td><td>${esc(m.cal)}</td><td>${esc(m.obs)}</td></tr>`).join("")}</table></div>`:"";
+ const acts=S.actions.length?`<div class="card"><h2>Plano de adequações</h2><table><tr><th>Item</th><th>Prio.</th><th>Ref.</th><th>Adequação</th><th>Base</th></tr>${S.actions.map(a=>`<tr><td>${esc(a.item)}</td><td>${esc(a.pri)}</td><td>${esc(a.ref)}</td><td>${esc(a.desc)}</td><td>${esc(a.fonte)}</td></tr>`).join("")}</table></div>`:"";
+ const costs=S.costs.length?`<div class="card"><h2>Estimativa de custo</h2><table><tr><th>Item</th><th>Qtd</th><th>Unit.</th><th>Total</th><th>Fonte</th></tr>${S.costs.map(c=>`<tr><td>${esc(c.item)}</td><td>${c.q} ${esc(c.un)}</td><td>R$ ${money(c.pu)}</td><td>R$ ${money(c.q*c.pu)}</td><td>${esc(c.fonte)}</td></tr>`).join("")}<tr><td colspan="3"><b>Total</b></td><td colspan="2"><b>R$ ${money(total)}</b></td></tr></table></div>`:"";
+ const resumo=`<div class="card"><h2>Resumo</h2><p>Conformes: ${x.c} • Não conformes: ${x.n} • Pendentes/Atenção: ${x.p} • Não aplicáveis: ${x.na}</p><p><b>Conclusão:</b> ${conc}</p><p class="muted">Base: NR-10, NR-06, NBR 5410, NBR 14039, NBR 5419, NBR 5460 e PNR Vale (000031/000051/000052/000053/000068/000069/000080/000131/000138/000149/000188/000222) — RAC 10 / PRO-041951. Nenhuma informação não comprovada deve ser interpretada como fato; confirme a revisão vigente das normas na unidade.</p></div>`;
+ $("report").innerHTML=f+resumo+lotoR+norms+meds+acts+costs+ev}
+
+/* ===== ENVIO ===== */
+function sendMail(){const e=$("email").value.trim();if(!e||!e.includes("@"))return alert("Digite um e-mail válido.");
+ const x=counts();const subject=encodeURIComponent("Relatório Diagnóstico Elétrico — "+($("local").value||"Campo"));
+ const body=encodeURIComponent($("emailMsg").value+"\n\nUnidade: "+$("cliente").value+"\nLocal/TAG: "+$("local").value+"\nData: "+$("data").value+
+  "\n\nResumo: Conformes "+x.c+" | Não conformes "+x.n+" | Pendentes "+x.p+" | N/A "+x.na+
+  "\n\nObservação: gere/salve o PDF antes e anexe-o no aplicativo de e-mail.");
+ location.href=`mailto:${e}?subject=${subject}&body=${body}`}
+function exportJSON(){const blob=new Blob([JSON.stringify(S,(k,v)=>k==='photos'?'[fotos omitidas]':v,2)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="diag_eletrica_"+($("local").value||"campo")+".json";a.click()}
+
+/* ===== INIT ===== */
+renderTabs();renderChecklist();renderLoto();renderPhotos();renderMed();renderActions();renderCosts();renderResult();
+</script>
+</body>
+</html>
